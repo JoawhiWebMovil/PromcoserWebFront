@@ -1,9 +1,8 @@
 <template>
   <q-item
     clickable
-    tag="a"
-    target="_blank"
-    :href="props.link"
+    tag="router-link" 
+    :to="props.link"
   >
     <q-item-section
       v-if="props.icon"
@@ -14,25 +13,19 @@
 
     <q-item-section>
       <q-item-label>{{ props.title }}</q-item-label>
-      <q-item-label caption>{{ props.caption }}</q-item-label>
     </q-item-section>
   </q-item>
 </template>
 
 <script setup>
 defineOptions({
-  name: 'EssentialLink'
+  name: 'MenuSideBar'
 })
 
 const props = defineProps({
   title: {
     type: String,
     required: true
-  },
-
-  caption: {
-    type: String,
-    default: ''
   },
 
   link: {
