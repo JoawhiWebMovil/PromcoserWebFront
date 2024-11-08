@@ -15,12 +15,11 @@
           Buen día, {{ username }}
         </q-toolbar-title>
 
-        <!-- Sección Código e Icono -->
         <div class="q-gutter-sm" style="display: flex; align-items: center; justify-content: flex-end;">
           <div class="code-text" style="font-size: 16px; font-weight: 500;">
             Codigo: 21100165
           </div>
-          <!-- Casita (home) para ir a la vista predeterminada, solo visible cuando no estamos en la pantalla principal -->
+
           <q-btn
             v-if="!isOnHomePage"
             flat
@@ -103,10 +102,8 @@ const leftDrawerOpen = ref(false)
 const router = useRouter()
 const route = useRoute()
 
-// Computed property para verificar si estamos en la ruta principal
 const isOnHomePage = computed(() => route.path === '/homeAdmin')
 
-// Función para redirigir a la página principal (home)
 function goToHome() {
   router.push({ path: '/homeAdmin' })
 }

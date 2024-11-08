@@ -1,10 +1,9 @@
 <template>
   <q-page class="bg-light-gray">
-    <!-- Información Cargada -->
+
     <div v-if="data" class="content-wrapper">
       <h2 class="title">Información General de la Empresa</h2>
-
-      <!-- Resumen de Proyectos -->
+   
       <div class="section">
         <h3 class="section-title">Resumen de Proyectos</h3>
         <q-card class="info-card">
@@ -17,7 +16,6 @@
         </q-card>
       </div>
 
-      <!-- Resumen Financiero -->
       <div class="section">
         <h3 class="section-title">Resumen Financiero</h3>
         <q-card class="info-card">
@@ -29,7 +27,6 @@
         </q-card>
       </div>
 
-      <!-- Estado de Maquinaria -->
       <div class="section">
         <h3 class="section-title">Estado de la Maquinaria</h3>
         <q-card class="info-card">
@@ -41,7 +38,6 @@
         </q-card>
       </div>
 
-      <!-- Gestión de Personal -->
       <div class="section">
         <h3 class="section-title">Gestión de Personal</h3>
         <q-card class="info-card">
@@ -59,7 +55,6 @@
         </q-card>
       </div>
 
-      <!-- Alertas y Notificaciones -->
       <div class="section">
         <h3 class="section-title">Alertas y Notificaciones</h3>
         <q-card class="info-card">
@@ -73,7 +68,6 @@
         </q-card>
       </div>
 
-      <!-- Documentos Recientes -->
       <div class="section">
         <h3 class="section-title">Documentos Recientes</h3>
         <q-card class="info-card">
@@ -88,7 +82,6 @@
       </div>
     </div>
 
-    <!-- Mensaje de Carga -->
     <div v-else class="loading-message">
       <q-spinner color="primary" size="50px" />
       <p>Cargando datos...</p>
@@ -138,7 +131,7 @@ const formatCurrency = (value) => {
 }
 
 .section-title {
-  color: #e53e3e; /* Rojo de la empresa */
+  color: #e53e3e; 
   font-size: 1.25rem;
   margin-bottom: 10px;
 }
@@ -156,11 +149,11 @@ const formatCurrency = (value) => {
 
 .value {
   font-weight: bold;
-  color: #2d3748; /* Color oscuro para resaltar los valores */
+  color: #2d3748;
 }
 
 .subsection-title {
-  color: #2b6cb0; /* Azul de la empresa */
+  color: #2b6cb0; 
   font-size: 1.1rem;
 }
 

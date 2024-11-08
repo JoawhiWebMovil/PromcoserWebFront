@@ -52,7 +52,6 @@ export default {
   methods: {
     login() {
       this.$router.push({ path: '/homeAdmin', query: { username: this.username } })
-    //   // Lógica de autenticación aquí (por ejemplo, validar usuario y contraseña)
     //   if (this.username === 'admin' && this.password === '1234') {
     //     this.$router.push('/homeAdmin')
     //   } else {

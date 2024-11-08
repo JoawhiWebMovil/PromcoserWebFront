@@ -33,7 +33,7 @@
 
 <script>
 import { ref, onMounted } from 'vue';
-import { getAllClientes } from '../../../services/RegistroDataRepository/clienteService'; // Asegúrate de tener este servicio
+import { getAllClientes } from '../../../services/RegistroDataRepository/clienteService';
 
 export default {
   name: 'ClienteInfo',
@@ -44,7 +44,7 @@ export default {
 
     const obtenerClientes = async () => {
       try {
-        clientes.value = await getAllClientes(); // Obtener clientes en vez de empleados
+        clientes.value = await getAllClientes();
       } catch (error) {
         console.error('Error al obtener la información de los clientes:', error);
       }
