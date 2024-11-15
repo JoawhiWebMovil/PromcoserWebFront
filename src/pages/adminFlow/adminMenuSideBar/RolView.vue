@@ -3,8 +3,8 @@
     <div class="botones-editar-eliminar">
       <q-btn
         @click="abrirFormularioCreacion"
-        label="Crear Cliente"
-        class="crear-cliente-button"
+        label="Crear Rol"
+        class="crear-rol-button"
         color="primary"
       />
       <q-toggle
@@ -16,38 +16,22 @@
         @update:model-value="onToggleChange"
       />
     </div>
-    <table v-if="clientes.length > 0" class="clientes-table">
+    <table v-if="rols.length > 0" class="rols-table">
       <thead>
         <tr>
           <th>Id</th>
-          <th>Nombre</th>
-          <th>Apellido</th>
-          <th>Razón Social</th>
-          <th>RUC</th>
-          <th>Teléfono</th>
-          <th>Correo Electrónico</th>
-          <th>Dirección</th>
+          <th>Rol</th>
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="cliente in clientes"
-          :key="cliente.idCliente"
-          @click="seleccionarCliente(cliente)"
-        >
-          <td>{{ cliente.idCliente }}</td>
-          <td>{{ cliente.nombre }}</td>
-          <td>{{ cliente.apellido }}</td>
-          <td>{{ cliente.razonSocial }}</td>
-          <td>{{ cliente.ruc }}</td>
-          <td>{{ cliente.telefono }}</td>
-          <td>{{ cliente.correoElectronico }}</td>
-          <td>{{ cliente.direccion }}</td>
+        <tr v-for="rol in rols" :key="rol.idRol" @click="seleccionarRol(rol)">
+          <td>{{ rol.idRol }}</td>
+          <td>{{ rol.descripcionRol }}</td>
         </tr>
       </tbody>
     </table>
 
-    <div v-if="clienteSeleccionado" class="cliente-seleccionado">
+    <div v-if="rolSeleccionado" class="rol-seleccionado">
       <div class="botones-editar-eliminar">
         <q-btn
           @click="abrirFormularioEdicion"
@@ -66,40 +50,10 @@
 
     <div v-if="mostrarFormulario" class="modal-overlay">
       <div class="modal-content">
-        <h2>{{ esNuevoCliente ? "Crear Cliente" : "Editar Cliente" }}</h2>
+        <h2>{{ esNuevoRol ? "Crear Rol" : "Editar Rol" }}</h2>
         <form @submit.prevent="guardarCambios">
-          <label for="nombre">Nombre:</label>
-          <input id="nombre" v-model="clienteTemporal.nombre" type="text" />
-
-          <label for="apellido">Apellido:</label>
-          <input id="apellido" v-model="clienteTemporal.apellido" type="text" />
-
-          <label for="razonSocial">Razón Social:</label>
-          <input
-            id="razonSocial"
-            v-model="clienteTemporal.razonSocial"
-            type="text"
-          />
-
-          <label for="ruc">RUC:</label>
-          <input id="ruc" v-model="clienteTemporal.ruc" type="text" />
-
-          <label for="correoElectronico">Correo Electrónico:</label>
-          <input
-            id="correoElectronico"
-            v-model="clienteTemporal.correoElectronico"
-            type="email"
-          />
-
-          <label for="telefono">Teléfono:</label>
-          <input id="telefono" v-model="clienteTemporal.telefono" type="tel" />
-
-          <label for="direccion">Dirección:</label>
-          <input
-            id="direccion"
-            v-model="clienteTemporal.direccion"
-            type="text"
-          />
+          <label for="nombre">Rol:</label>
+          <input id="nombre" v-model="rolTemporal.descripcionRol" type="text" />
 
           <button type="submit">Guardar</button>
           <button type="button" @click="cancelarEdicion">Cancelar</button>
@@ -112,13 +66,13 @@
       <q-card-section class="q-pt-none">
         <div class="text-h6">
           ¿Estás seguro de {{ mostrarActivos ? "desactivar" : "activar" }} este
-          cliente?
+          rol?
         </div>
       </q-card-section>
 
       <q-card-actions>
         <q-btn flat label="No" @click="cancelarEdicion" color="secondary" />
-        <q-btn flat label="Sí" @click="eliminarCliente" color="negative" />
+        <q-btn flat label="Sí" @click="eliminarRol" color="negative" />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -127,81 +81,71 @@
 <script>
 import { ref, reactive, onMounted } from "vue";
 import {
-  getAllClientesActive,
-  getAllClientesInactive,
-  updateCliente,
-  createCliente,
+  getAllRolsActive,
+  getAllRolsInactive,
+  updateRol,
+  createRol,
   deactivate,
   activate,
-} from "../../../services/RegistroDataRepository/clienteService";
+} from "../../../services/RegistroDataRepository/rolService";
 
 export default {
-  name: "ClienteInfo",
+  name: "RolInfo",
 
   setup() {
-    const clientes = ref([]);
-    const clienteSeleccionado = ref(null);
-    const clienteTemporal = reactive({});
+    const rols = ref([]);
+    const rolSeleccionado = ref(null);
+    const rolTemporal = reactive({});
     const mostrarFormulario = ref(false);
-    const esNuevoCliente = ref(false);
+    const esNuevoRol = ref(false);
     const mostrarDialogoEliminar = ref(false); // Variable para controlar el pop-up
     const mostrarActivos = ref(true);
 
-    const obtenerClientes = async () => {
+    const obtenerRols = async () => {
       try {
         if (mostrarActivos.value) {
-          clientes.value = await getAllClientesActive();
+          rols.value = await getAllRolsActive();
         } else {
-          clientes.value = await getAllClientesInactive();
+          rols.value = await getAllRolsInactive();
         }
       } catch (error) {
-        console.error(
-          "Error al obtener la información de los clientes:",
-          error
-        );
+        console.error("Error al obtener la información de los rols:", error);
       }
     };
 
-    const seleccionarCliente = (cliente) => {
-      clienteSeleccionado.value = cliente;
-      esNuevoCliente.value = false;
+    const seleccionarRol = (rol) => {
+      rolSeleccionado.value = rol;
+      esNuevoRol.value = false;
     };
 
     const abrirFormularioCreacion = () => {
-      clienteSeleccionado.value = null;
-      Object.assign(clienteTemporal, {
-        nombre: "",
-        apellido: "",
-        razonSocial: "",
-        correoElectronico: "",
-        telefono: "",
-        direccion: "",
-        ruc: "",
+      rolSeleccionado.value = null;
+      Object.assign(rolTemporal, {
+        descripcionRol: "",
         estado: true,
       });
-      esNuevoCliente.value = true;
+      esNuevoRol.value = true;
       mostrarFormulario.value = true;
     };
 
     const abrirFormularioEdicion = () => {
-      if (clienteSeleccionado.value) {
-        Object.assign(clienteTemporal, { ...clienteSeleccionado.value });
-        esNuevoCliente.value = false;
+      if (rolSeleccionado.value) {
+        Object.assign(rolTemporal, { ...rolSeleccionado.value });
+        esNuevoRol.value = false;
         mostrarFormulario.value = true;
       }
     };
 
     const guardarCambios = async () => {
       try {
-        if (esNuevoCliente.value) {
-          const { idCliente, ...entidadSinId } = clienteTemporal; // Quitar campo ID
-          console.log("Crear nuevo cliente", entidadSinId);
-          await createCliente(entidadSinId);
+        if (esNuevoRol.value) {
+          const { idRol, ...rolSinId } = rolTemporal; // Quitar campo ID
+          await createRol(rolSinId);
         } else {
-          await updateCliente(clienteTemporal);
+          await updateRol(rolTemporal);
         }
-        clienteSeleccionado.value = false;
-        await obtenerClientes();
+        rolSeleccionado.value = false;
+        await obtenerRols();
       } catch (error) {
         console.error("Error al guardar los cambios:", error);
       } finally {
@@ -210,51 +154,51 @@ export default {
     };
 
     const cancelarEdicion = () => {
-      clienteSeleccionado.value = false;
+      rolSeleccionado.value = false;
       mostrarFormulario.value = false;
       mostrarDialogoEliminar.value = false;
     };
 
-    const eliminarCliente = async () => {
+    const eliminarRol = async () => {
       try {
-        if (clienteSeleccionado.value) {
+        if (rolSeleccionado.value) {
           if (mostrarActivos.value) {
-            await deactivate(clienteSeleccionado.value.idCliente);
+            await deactivate(rolSeleccionado.value.idRol);
           } else {
-            await activate(clienteSeleccionado.value.idCliente);
+            await activate(rolSeleccionado.value.idRol);
           }
-          await obtenerClientes();
-          clienteSeleccionado.value = false;
+          await obtenerRols();
+          rolSeleccionado.value = false;
         }
       } catch (error) {
-        console.error("Error al eliminar el cliente:", error);
+        console.error("Error al eliminar el rol:", error);
       } finally {
         mostrarDialogoEliminar.value = false;
       }
     };
 
     const onToggleChange = (value) => {
-      obtenerClientes();
-      clienteSeleccionado.value = false;
+      obtenerRols();
+      rolSeleccionado.value = false;
     };
 
     onMounted(() => {
-      obtenerClientes();
+      obtenerRols();
     });
 
     return {
-      clientes,
-      clienteSeleccionado,
-      clienteTemporal,
+      rols,
+      rolSeleccionado,
+      rolTemporal,
       mostrarFormulario,
-      esNuevoCliente,
+      esNuevoRol,
       mostrarDialogoEliminar, // Pasar la variable al template
-      seleccionarCliente,
+      seleccionarRol,
       abrirFormularioCreacion,
       abrirFormularioEdicion,
       guardarCambios,
       cancelarEdicion,
-      eliminarCliente,
+      eliminarRol,
       mostrarActivos,
       onToggleChange,
       deactivate,
@@ -265,7 +209,7 @@ export default {
 </script>
 
 <style scoped>
-.clientes-table {
+.rols-table {
   width: 80%;
   margin-top: 70px;
   border-collapse: collapse;
@@ -274,37 +218,37 @@ export default {
   margin-right: auto;
 }
 
-.clientes-table th,
-.clientes-table td {
+.rols-table th,
+.rols-table td {
   padding: 12px;
   text-align: left;
 }
 
-.clientes-table th {
+.rols-table th {
   background-color: #1e3a8a;
   color: white;
   font-size: 16px;
 }
 
-.clientes-table td {
+.rols-table td {
   background-color: #f9fafb;
   color: #333;
   font-size: 14px;
 }
 
-.clientes-table tr:nth-child(even) td {
+.rols-table tr:nth-child(even) td {
   background-color: #e5e7eb;
 }
 
-.clientes-table tr:hover td {
+.rols-table tr:hover td {
   background-color: #e0e7ff;
 }
 
-.clientes-table td {
+.rols-table td {
   border-bottom: 1px solid #ddd;
 }
 
-.cliente-seleccionado {
+.rol-seleccionado {
   margin-top: 50px;
   font-size: 18px;
   text-align: left;
@@ -376,7 +320,7 @@ body.modal-open {
   overflow: hidden;
 }
 
-.crear-cliente-button {
+.crear-rol-button {
   margin-left: 8%;
   margin-top: 20px;
   padding: 10px 20px;
