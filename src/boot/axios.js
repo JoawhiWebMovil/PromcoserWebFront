@@ -2,8 +2,8 @@ import { boot } from "quasar/wrappers";
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:3000",
-  timeout: 1000,
+  baseURL: "http://localhost:5159",
+  timeout: 3000,
 });
 
 export default boot(({ app }) => {

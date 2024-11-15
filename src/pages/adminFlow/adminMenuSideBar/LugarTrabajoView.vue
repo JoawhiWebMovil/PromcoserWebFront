@@ -3,8 +3,8 @@
     <div class="botones-editar-eliminar">
       <q-btn
         @click="abrirFormularioCreacion"
-        label="Crear Cliente"
-        class="crear-cliente-button"
+        label="Crear Lugar"
+        class="crear-lugar-button"
         color="primary"
       />
       <q-toggle
@@ -16,38 +16,26 @@
         @update:model-value="onToggleChange"
       />
     </div>
-    <table v-if="clientes.length > 0" class="clientes-table">
+    <table v-if="lugars.length > 0" class="lugars-table">
       <thead>
         <tr>
           <th>Id</th>
-          <th>Nombre</th>
-          <th>Apellido</th>
-          <th>Razón Social</th>
-          <th>RUC</th>
-          <th>Teléfono</th>
-          <th>Correo Electrónico</th>
-          <th>Dirección</th>
+          <th>Lugar</th>
         </tr>
       </thead>
       <tbody>
         <tr
-          v-for="cliente in clientes"
-          :key="cliente.idCliente"
-          @click="seleccionarCliente(cliente)"
+          v-for="lugar in lugars"
+          :key="lugar.idLugarTrabajo"
+          @click="seleccionarLugar(lugar)"
         >
-          <td>{{ cliente.idCliente }}</td>
-          <td>{{ cliente.nombre }}</td>
-          <td>{{ cliente.apellido }}</td>
-          <td>{{ cliente.razonSocial }}</td>
-          <td>{{ cliente.ruc }}</td>
-          <td>{{ cliente.telefono }}</td>
-          <td>{{ cliente.correoElectronico }}</td>
-          <td>{{ cliente.direccion }}</td>
+          <td>{{ lugar.idLugarTrabajo }}</td>
+          <td>{{ lugar.descripcion }}</td>
         </tr>
       </tbody>
     </table>
 
-    <div v-if="clienteSeleccionado" class="cliente-seleccionado">
+    <div v-if="lugarSeleccionado" class="lugar-seleccionado">
       <div class="botones-editar-eliminar">
         <q-btn
           @click="abrirFormularioEdicion"
@@ -66,40 +54,10 @@
 
     <div v-if="mostrarFormulario" class="modal-overlay">
       <div class="modal-content">
-        <h2>{{ esNuevoCliente ? "Crear Cliente" : "Editar Cliente" }}</h2>
+        <h2>{{ esNuevoLugar ? "Crear Lugar" : "Editar Lugar" }}</h2>
         <form @submit.prevent="guardarCambios">
-          <label for="nombre">Nombre:</label>
-          <input id="nombre" v-model="clienteTemporal.nombre" type="text" />
-
-          <label for="apellido">Apellido:</label>
-          <input id="apellido" v-model="clienteTemporal.apellido" type="text" />
-
-          <label for="razonSocial">Razón Social:</label>
-          <input
-            id="razonSocial"
-            v-model="clienteTemporal.razonSocial"
-            type="text"
-          />
-
-          <label for="ruc">RUC:</label>
-          <input id="ruc" v-model="clienteTemporal.ruc" type="text" />
-
-          <label for="correoElectronico">Correo Electrónico:</label>
-          <input
-            id="correoElectronico"
-            v-model="clienteTemporal.correoElectronico"
-            type="email"
-          />
-
-          <label for="telefono">Teléfono:</label>
-          <input id="telefono" v-model="clienteTemporal.telefono" type="tel" />
-
-          <label for="direccion">Dirección:</label>
-          <input
-            id="direccion"
-            v-model="clienteTemporal.direccion"
-            type="text"
-          />
+          <label for="nombre">Lugar:</label>
+          <input id="nombre" v-model="lugarTemporal.descripcion" type="text" />
 
           <button type="submit">Guardar</button>
           <button type="button" @click="cancelarEdicion">Cancelar</button>
@@ -112,13 +70,13 @@
       <q-card-section class="q-pt-none">
         <div class="text-h6">
           ¿Estás seguro de {{ mostrarActivos ? "desactivar" : "activar" }} este
-          cliente?
+          lugar?
         </div>
       </q-card-section>
 
       <q-card-actions>
         <q-btn flat label="No" @click="cancelarEdicion" color="secondary" />
-        <q-btn flat label="Sí" @click="eliminarCliente" color="negative" />
+        <q-btn flat label="Sí" @click="eliminarLugar" color="negative" />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -127,81 +85,73 @@
 <script>
 import { ref, reactive, onMounted } from "vue";
 import {
-  getAllClientesActive,
-  getAllClientesInactive,
-  updateCliente,
-  createCliente,
+  getAllLugarsActive,
+  getAllLugarsInactive,
+  updateLugar,
+  createLugar,
   deactivate,
   activate,
-} from "../../../services/RegistroDataRepository/clienteService";
+} from "../../../services/RegistroDataRepository/lugarTrabajoService";
 
 export default {
-  name: "ClienteInfo",
+  name: "LugarInfo",
 
   setup() {
-    const clientes = ref([]);
-    const clienteSeleccionado = ref(null);
-    const clienteTemporal = reactive({});
+    const lugars = ref([]);
+    const lugarSeleccionado = ref(null);
+    const lugarTemporal = reactive({});
     const mostrarFormulario = ref(false);
-    const esNuevoCliente = ref(false);
-    const mostrarDialogoEliminar = ref(false); // Variable para controlar el pop-up
+    const esNuevoLugar = ref(false);
+    const mostrarDialogoEliminar = ref(false); // Variable para contlugarar el pop-up
     const mostrarActivos = ref(true);
 
-    const obtenerClientes = async () => {
+    const obtenerLugars = async () => {
       try {
         if (mostrarActivos.value) {
-          clientes.value = await getAllClientesActive();
+          lugars.value = await getAllLugarsActive();
         } else {
-          clientes.value = await getAllClientesInactive();
+          lugars.value = await getAllLugarsInactive();
         }
       } catch (error) {
-        console.error(
-          "Error al obtener la información de los clientes:",
-          error
-        );
+        console.error("Error al obtener la información de los lugars:", error);
       }
     };
 
-    const seleccionarCliente = (cliente) => {
-      clienteSeleccionado.value = cliente;
-      esNuevoCliente.value = false;
+    const seleccionarLugar = (lugar) => {
+      lugarSeleccionado.value = lugar;
+      esNuevoLugar.value = false;
     };
 
     const abrirFormularioCreacion = () => {
-      clienteSeleccionado.value = null;
-      Object.assign(clienteTemporal, {
-        nombre: "",
-        apellido: "",
-        razonSocial: "",
-        correoElectronico: "",
-        telefono: "",
-        direccion: "",
-        ruc: "",
+      lugarSeleccionado.value = null;
+      Object.assign(lugarTemporal, {
+        descripcion: "",
         estado: true,
       });
-      esNuevoCliente.value = true;
+      console.log("Crear nuevo lugar", lugarTemporal);
+      esNuevoLugar.value = true;
       mostrarFormulario.value = true;
     };
 
     const abrirFormularioEdicion = () => {
-      if (clienteSeleccionado.value) {
-        Object.assign(clienteTemporal, { ...clienteSeleccionado.value });
-        esNuevoCliente.value = false;
+      if (lugarSeleccionado.value) {
+        Object.assign(lugarTemporal, { ...lugarSeleccionado.value });
+        esNuevoLugar.value = false;
         mostrarFormulario.value = true;
       }
     };
 
     const guardarCambios = async () => {
       try {
-        if (esNuevoCliente.value) {
-          const { idCliente, ...entidadSinId } = clienteTemporal; // Quitar campo ID
-          console.log("Crear nuevo cliente", entidadSinId);
-          await createCliente(entidadSinId);
+        if (esNuevoLugar.value) {
+          const { idLugarTrabajo, ...entidadSinId } = lugarTemporal; // Quitar campo ID
+          console.log("Crear nuevo lugar", entidadSinId);
+          await createLugar(entidadSinId);
         } else {
-          await updateCliente(clienteTemporal);
+          await updateLugar(lugarTemporal);
         }
-        clienteSeleccionado.value = false;
-        await obtenerClientes();
+        lugarSeleccionado.value = false;
+        await obtenerLugars();
       } catch (error) {
         console.error("Error al guardar los cambios:", error);
       } finally {
@@ -210,51 +160,51 @@ export default {
     };
 
     const cancelarEdicion = () => {
-      clienteSeleccionado.value = false;
+      lugarSeleccionado.value = false;
       mostrarFormulario.value = false;
       mostrarDialogoEliminar.value = false;
     };
 
-    const eliminarCliente = async () => {
+    const eliminarLugar = async () => {
       try {
-        if (clienteSeleccionado.value) {
+        if (lugarSeleccionado.value) {
           if (mostrarActivos.value) {
-            await deactivate(clienteSeleccionado.value.idCliente);
+            await deactivate(lugarSeleccionado.value.idLugarTrabajo);
           } else {
-            await activate(clienteSeleccionado.value.idCliente);
+            await activate(lugarSeleccionado.value.idLugarTrabajo);
           }
-          await obtenerClientes();
-          clienteSeleccionado.value = false;
+          await obtenerLugars();
+          lugarSeleccionado.value = false;
         }
       } catch (error) {
-        console.error("Error al eliminar el cliente:", error);
+        console.error("Error al eliminar el lugar:", error);
       } finally {
         mostrarDialogoEliminar.value = false;
       }
     };
 
     const onToggleChange = (value) => {
-      obtenerClientes();
-      clienteSeleccionado.value = false;
+      obtenerLugars();
+      lugarSeleccionado.value = false;
     };
 
     onMounted(() => {
-      obtenerClientes();
+      obtenerLugars();
     });
 
     return {
-      clientes,
-      clienteSeleccionado,
-      clienteTemporal,
+      lugars,
+      lugarSeleccionado,
+      lugarTemporal,
       mostrarFormulario,
-      esNuevoCliente,
+      esNuevoLugar,
       mostrarDialogoEliminar, // Pasar la variable al template
-      seleccionarCliente,
+      seleccionarLugar,
       abrirFormularioCreacion,
       abrirFormularioEdicion,
       guardarCambios,
       cancelarEdicion,
-      eliminarCliente,
+      eliminarLugar,
       mostrarActivos,
       onToggleChange,
       deactivate,
@@ -265,7 +215,7 @@ export default {
 </script>
 
 <style scoped>
-.clientes-table {
+.lugars-table {
   width: 80%;
   margin-top: 70px;
   border-collapse: collapse;
@@ -274,37 +224,37 @@ export default {
   margin-right: auto;
 }
 
-.clientes-table th,
-.clientes-table td {
+.lugars-table th,
+.lugars-table td {
   padding: 12px;
   text-align: left;
 }
 
-.clientes-table th {
+.lugars-table th {
   background-color: #1e3a8a;
   color: white;
   font-size: 16px;
 }
 
-.clientes-table td {
+.lugars-table td {
   background-color: #f9fafb;
   color: #333;
   font-size: 14px;
 }
 
-.clientes-table tr:nth-child(even) td {
+.lugars-table tr:nth-child(even) td {
   background-color: #e5e7eb;
 }
 
-.clientes-table tr:hover td {
+.lugars-table tr:hover td {
   background-color: #e0e7ff;
 }
 
-.clientes-table td {
+.lugars-table td {
   border-bottom: 1px solid #ddd;
 }
 
-.cliente-seleccionado {
+.lugar-seleccionado {
   margin-top: 50px;
   font-size: 18px;
   text-align: left;
@@ -376,7 +326,7 @@ body.modal-open {
   overflow: hidden;
 }
 
-.crear-cliente-button {
+.crear-lugar-button {
   margin-left: 8%;
   margin-top: 20px;
   padding: 10px 20px;

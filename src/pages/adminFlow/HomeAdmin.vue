@@ -11,12 +11,13 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title>
-          Buen día, {{ username }}
-        </q-toolbar-title>
+        <q-toolbar-title> Buen día, {{ username }} </q-toolbar-title>
 
-        <div class="q-gutter-sm" style="display: flex; align-items: center; justify-content: flex-end;">
-          <div class="code-text" style="font-size: 16px; font-weight: 500;">
+        <div
+          class="q-gutter-sm"
+          style="display: flex; align-items: center; justify-content: flex-end"
+        >
+          <div class="code-text" style="font-size: 16px; font-weight: 500">
             Codigo: 21100165
           </div>
 
@@ -28,17 +29,13 @@
             icon="home"
             aria-label="Home"
             @click="goToHome"
-            style="margin-left: 10px;"
+            style="margin-left: 10px"
           />
         </div>
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      bordered
-      overlay
-    >
+    <q-drawer v-model="leftDrawerOpen" bordered overlay>
       <q-list>
         <q-item-label header>
           Registro de Datos
@@ -67,49 +64,64 @@
 </template>
 
 <script setup>
-import { ref, defineOptions, computed } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-import EssentialLink from 'src/components/MenuSidebar.vue'
+import { ref, defineOptions, computed } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import EssentialLink from "src/components/MenuSidebar.vue";
 
 defineOptions({
-  name: 'HomeAdmin',
+  name: "HomeAdmin",
   computed: {
     username() {
-      return this.$route.query.username || 'Admin';
-    }
-  }
-})
+      return this.$route.query.username || "Admin";
+    },
+  },
+});
 
 const linksList = [
   {
-    title: 'Empleados',
-    icon: 'person',
-    link: '/homeAdmin/empleado'
+    title: "Personal",
+    icon: "group",
+    link: "/homeAdmin/personal",
   },
   {
-    title: 'Maquinaria',
-    icon: 'construction',
-    link: '/homeAdmin/maquinaria'
+    title: "Maquinaria",
+    icon: "construction",
+    link: "/homeAdmin/maquinaria",
   },
   {
-    title: 'Cliente',
-    icon: 'business',
-    link: '/homeAdmin/cliente'
-  }
-]
+    title: "Cliente",
+    icon: "business",
+    link: "/homeAdmin/cliente",
+  },
+  {
+    title: "Rol",
+    icon: "security",
+    link: "/homeAdmin/rol",
+  },
+  {
+    title: "Lugar de Trabajo",
+    icon: "location_on",
+    link: "/homeAdmin/lugarTrabajo",
+  },
+  {
+    title: "Marca",
+    icon: "directions_car",
+    link: "/homeAdmin/marca",
+  },
+];
 
-const leftDrawerOpen = ref(false)
-const router = useRouter()
-const route = useRoute()
+const leftDrawerOpen = ref(false);
+const router = useRouter();
+const route = useRoute();
 
-const isOnHomePage = computed(() => route.path === '/homeAdmin')
+const isOnHomePage = computed(() => route.path === "/homeAdmin");
 
 function goToHome() {
-  router.push({ path: '/homeAdmin' })
+  router.push({ path: "/homeAdmin" });
 }
 
 function toggleLeftDrawer() {
-  leftDrawerOpen.value = !leftDrawerOpen.value
+  leftDrawerOpen.value = !leftDrawerOpen.value;
 }
 </script>
 
@@ -123,5 +135,4 @@ function toggleLeftDrawer() {
   font-size: 20px;
   font-weight: 700;
 }
-
 </style>

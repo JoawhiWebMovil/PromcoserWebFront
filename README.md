@@ -2,6 +2,10 @@
 
 Projecto web Promcoser
 
+# DataBase SCRIPT
+
+https://drive.google.com/file/d/1RFoYcLlXxDpPlEjW3-_3T_KI8qFWOou7/view?usp=drive_link
+
 ## Install the dependencies
 
 ```bash
