@@ -108,13 +108,6 @@
             type="text"
           />
 
-          <label for="telefono">Telefono:</label>
-          <input
-            id="telefono"
-            v-model="personalTemporal.telefono"
-            type="text"
-          />
-
           <label for="direccion">Direccion:</label>
           <input
             id="direccion"
@@ -247,7 +240,7 @@ export default {
         if (esNuevoPersonal.value) {
           const { idPersonal, ...entidadSinId } = personalTemporal; // Quitar campo ID
           console.log("Crear nuevo personal", entidadSinId);
-          await createPersonal(personaSinId);
+          await createPersonal(entidadSinId);
         } else {
           await updatePersonal(personalTemporal);
         }

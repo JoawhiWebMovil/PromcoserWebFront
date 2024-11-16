@@ -139,8 +139,8 @@ export default {
     const guardarCambios = async () => {
       try {
         if (esNuevoRol.value) {
-          const { idRol, ...rolSinId } = rolTemporal; // Quitar campo ID
-          await createRol(rolSinId);
+          const { idRol, ...entidadSinId } = rolTemporal; // Quitar campo ID
+          await createRol(entidadSinId);
         } else {
           await updateRol(rolTemporal);
         }
