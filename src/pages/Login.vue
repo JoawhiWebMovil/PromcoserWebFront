@@ -12,63 +12,87 @@
         <q-card-section class="q-pt-none">
           <div class="text-h6">Iniciar sesión</div>
         </q-card-section>
+        <form @submit.prevent="logIn">
+          <q-card-section>
+            <q-input
+              v-model="username"
+              label="Nombre de usuario"
+              type="text"
+              placeholder="Ingresa tu usuario"
+              autocomplete="username"
+              filled
+            />
+            <q-input
+              v-model="password"
+              type="password"
+              label="Contraseña"
+              placeholder="Ingresa tu contraseña"
+              autocomplete="current-password"
+              filled
+            />
+          </q-card-section>
 
-        <q-card-section>
-          <q-input
-            v-model="username"
-            label="Nombre de usuario"
-            placeholder="Ingresa tu usuario"
-            filled
-          />
-          <q-input
-            v-model="password"
-            type="password"
-            label="Contraseña"
-            placeholder="Ingresa tu contraseña"
-            filled
-          />
-        </q-card-section>
-
-        <q-card-actions align="center">
-          <q-btn
-            @click="login"
-            label="Iniciar sesión"
-            color="primary"
-            class="login-button"
-          />
-        </q-card-actions>
+          <q-card-actions align="center">
+            <q-btn
+              type="submit"
+              label="Iniciar sesión"
+              color="primary"
+              class="login-button"
+            />
+          </q-card-actions>
+        </form>
       </q-card>
     </div>
   </div>
 </template>
 
 <script>
+import { ref } from "vue";
+import { useRouter } from "vue-router"; // Importamos el enrutador
+import { LogIn } from "../services/logInService";
+
 export default {
   name: "LoginView",
 
-  data() {
-    return {
-      username: "",
-      password: "",
-    };
-  },
+  setup() {
+    const username = ref("");
+    const password = ref("");
+    const router = useRouter(); // Inicializamos el enrutador
 
-  methods: {
-    login() {
-      this.$router.push({
-        path: "/homeAdmin",
-        query: { username: this.username },
-      });
-      //   if (this.username === 'admin' && this.password === '1234') {
-      //     this.$router.push('/homeAdmin')
-      //   } else {
-      //     this.$q.notify({
-      //       color: 'negative',
-      //       message: 'Usuario o contraseña incorrectos',
-      //       icon: 'error'
-      //     })
-      //   }
-    },
+    const logIn = async () => {
+      if (!username.value.trim() || !password.value.trim()) {
+        alert("Usuario y contraseña son requeridos.");
+        return;
+      }
+
+      const datos = {
+        usuario: username.value.trim().toLowerCase(),
+        contrasena: password.value.trim().toLowerCase(),
+      };
+
+      try {
+        const response = await LogIn(datos);
+        localStorage.setItem("userData", JSON.stringify(response));
+        if (response) {
+          navigateToHome();
+        } else {
+          alert("Usuario o contraseña incorrectos.");
+        }
+      } catch (error) {
+        alert("Hubo un problema con el login.");
+      }
+    };
+
+    const navigateToHome = () => {
+      router.push("/homeAdmin");
+    };
+
+    return {
+      username,
+      password,
+      logIn,
+      navigateToHome,
+    };
   },
 };
 </script>

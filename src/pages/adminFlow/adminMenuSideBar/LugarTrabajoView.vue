@@ -128,7 +128,6 @@ export default {
         descripcion: "",
         estado: true,
       });
-      console.log("Crear nuevo lugar", lugarTemporal);
       esNuevoLugar.value = true;
       mostrarFormulario.value = true;
     };
@@ -145,7 +144,6 @@ export default {
       try {
         if (esNuevoLugar.value) {
           const { idLugarTrabajo, ...entidadSinId } = lugarTemporal; // Quitar campo ID
-          console.log("Crear nuevo lugar", entidadSinId);
           await createLugar(entidadSinId);
         } else {
           await updateLugar(lugarTemporal);

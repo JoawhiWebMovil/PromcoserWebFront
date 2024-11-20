@@ -167,7 +167,6 @@ export default {
     const obtenerMarcas = async () => {
       try {
         marcas.value = await getAllMarcasActive();
-        console.log(marcas.value);
       } catch (error) {
         console.error("Error al obtener la información de las marcas:", error);
       }
@@ -223,7 +222,6 @@ export default {
         delete maquinariaTemporal.nombreMarca;
         if (esNuevoMaquinaria.value) {
           const { idMaquinaria, ...entidadSinId } = maquinariaTemporal; // Quitar campo ID
-          console.log("Crear nuevo maquinaria", entidadSinId);
           await createMaquinaria(entidadSinId);
         } else {
           await updateMaquinaria(maquinariaTemporal);
@@ -238,7 +236,6 @@ export default {
     };
 
     const cancelarEdicion = () => {
-      console.log(maquinariaTemporal);
       maquinariaSeleccionado.value = false;
       mostrarFormulario.value = false;
       mostrarDialogoEliminar.value = false;

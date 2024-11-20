@@ -144,7 +144,7 @@ export default {
     const clienteTemporal = reactive({});
     const mostrarFormulario = ref(false);
     const esNuevoCliente = ref(false);
-    const mostrarDialogoEliminar = ref(false); // Variable para controlar el pop-up
+    const mostrarDialogoEliminar = ref(false);
     const mostrarActivos = ref(true);
 
     const obtenerClientes = async () => {
@@ -195,7 +195,6 @@ export default {
       try {
         if (esNuevoCliente.value) {
           const { idCliente, ...entidadSinId } = clienteTemporal; // Quitar campo ID
-          console.log("Crear nuevo cliente", entidadSinId);
           await createCliente(entidadSinId);
         } else {
           await updateCliente(clienteTemporal);
