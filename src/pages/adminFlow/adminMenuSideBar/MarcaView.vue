@@ -128,7 +128,6 @@ export default {
         nombreMarca: "",
         estado: true,
       });
-      console.log("Crear nuevo marca", marcaTemporal);
       esNuevoMarca.value = true;
       mostrarFormulario.value = true;
     };
@@ -145,7 +144,6 @@ export default {
       try {
         if (esNuevoMarca.value) {
           const { idMarca, ...entidadSinId } = marcaTemporal; // Quitar campo ID
-          console.log("Crear nuevo marca", entidadSinId);
           await createMarca(entidadSinId);
         } else {
           await updateMarca(marcaTemporal);

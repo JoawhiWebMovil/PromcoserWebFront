@@ -181,7 +181,6 @@ export default {
     const obtenerRols = async () => {
       try {
         rols.value = await getAllRolsActive();
-        console.log(rols.value);
       } catch (error) {
         console.error("Error al obtener la información de las rols:", error);
       }
@@ -239,7 +238,6 @@ export default {
         delete personalTemporal.descripcionRol;
         if (esNuevoPersonal.value) {
           const { idPersonal, ...entidadSinId } = personalTemporal; // Quitar campo ID
-          console.log("Crear nuevo personal", entidadSinId);
           await createPersonal(entidadSinId);
         } else {
           await updatePersonal(personalTemporal);
@@ -254,7 +252,6 @@ export default {
     };
 
     const cancelarEdicion = () => {
-      console.log(personalTemporal);
       personalSeleccionado.value = false;
       mostrarFormulario.value = false;
       mostrarDialogoEliminar.value = false;
