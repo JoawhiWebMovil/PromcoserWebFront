@@ -27,14 +27,12 @@
           <th>Teléfono</th>
           <th>Correo Electrónico</th>
           <th>Dirección</th>
+          <th>Estado</th>
+          <th>Editar</th>
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="cliente in clientes"
-          :key="cliente.idCliente"
-          @click="seleccionarCliente(cliente)"
-        >
+        <tr v-for="cliente in clientes" :key="cliente.idCliente">
           <td>{{ cliente.idCliente }}</td>
           <td>{{ cliente.nombre }}</td>
           <td>{{ cliente.apellido }}</td>
@@ -43,85 +41,26 @@
           <td>{{ cliente.telefono }}</td>
           <td>{{ cliente.correoElectronico }}</td>
           <td>{{ cliente.direccion }}</td>
+          <td>
+            <q-btn
+              @click="eliminarCliente(cliente)"
+              :label="mostrarActivos ? 'Desactivar' : 'Activar'"
+              color="negative"
+              flat
+            />
+          </td>
+          <td>
+            <q-btn
+              @click="abrirFormularioEdicion(cliente)"
+              label="Editar"
+              color="primary"
+              flat
+            />
+          </td>
         </tr>
       </tbody>
     </table>
-
-    <div v-if="clienteSeleccionado" class="cliente-seleccionado">
-      <div class="botones-editar-eliminar">
-        <q-btn
-          @click="abrirFormularioEdicion"
-          label="Editar Datos:"
-          color="primary"
-          class="editar-button"
-        />
-        <q-btn
-          @click="mostrarDialogoEliminar = true"
-          :label="mostrarActivos ? 'Desactivar' : 'Activar'"
-          color="negative"
-          class="eliminar-button"
-        />
-      </div>
-    </div>
-
-    <div v-if="mostrarFormulario" class="modal-overlay">
-      <div class="modal-content">
-        <h2>{{ esNuevoCliente ? "Crear Cliente" : "Editar Cliente" }}</h2>
-        <form @submit.prevent="guardarCambios">
-          <label for="nombre">Nombre:</label>
-          <input id="nombre" v-model="clienteTemporal.nombre" type="text" />
-
-          <label for="apellido">Apellido:</label>
-          <input id="apellido" v-model="clienteTemporal.apellido" type="text" />
-
-          <label for="razonSocial">Razón Social:</label>
-          <input
-            id="razonSocial"
-            v-model="clienteTemporal.razonSocial"
-            type="text"
-          />
-
-          <label for="ruc">RUC:</label>
-          <input id="ruc" v-model="clienteTemporal.ruc" type="text" />
-
-          <label for="correoElectronico">Correo Electrónico:</label>
-          <input
-            id="correoElectronico"
-            v-model="clienteTemporal.correoElectronico"
-            type="email"
-          />
-
-          <label for="telefono">Teléfono:</label>
-          <input id="telefono" v-model="clienteTemporal.telefono" type="tel" />
-
-          <label for="direccion">Dirección:</label>
-          <input
-            id="direccion"
-            v-model="clienteTemporal.direccion"
-            type="text"
-          />
-
-          <button type="submit">Guardar</button>
-          <button type="button" @click="cancelarEdicion">Cancelar</button>
-        </form>
-      </div>
-    </div>
   </div>
-  <q-dialog v-model="mostrarDialogoEliminar">
-    <q-card>
-      <q-card-section class="q-pt-none">
-        <div class="text-h6">
-          ¿Estás seguro de {{ mostrarActivos ? "desactivar" : "activar" }} este
-          cliente?
-        </div>
-      </q-card-section>
-
-      <q-card-actions>
-        <q-btn flat label="No" @click="cancelarEdicion" color="secondary" />
-        <q-btn flat label="Sí" @click="eliminarCliente" color="negative" />
-      </q-card-actions>
-    </q-card>
-  </q-dialog>
 </template>
 
 <script>
@@ -183,12 +122,10 @@ export default {
       mostrarFormulario.value = true;
     };
 
-    const abrirFormularioEdicion = () => {
-      if (clienteSeleccionado.value) {
-        Object.assign(clienteTemporal, { ...clienteSeleccionado.value });
-        esNuevoCliente.value = false;
-        mostrarFormulario.value = true;
-      }
+    const abrirFormularioEdicion = (cliente) => {
+      Object.assign(clienteTemporal, { ...cliente });
+      esNuevoCliente.value = false;
+      mostrarFormulario.value = true;
     };
 
     const guardarCambios = async () => {
@@ -215,21 +152,16 @@ export default {
       mostrarDialogoEliminar.value = false;
     };
 
-    const eliminarCliente = async () => {
+    const eliminarCliente = async (cliente) => {
       try {
-        if (clienteSeleccionado.value) {
-          if (mostrarActivos.value) {
-            await deactivate(clienteSeleccionado.value.idCliente);
-          } else {
-            await activate(clienteSeleccionado.value.idCliente);
-          }
-          await obtenerClientes();
-          clienteSeleccionado.value = false;
+        if (mostrarActivos.value) {
+          await deactivate(cliente.idCliente);
+        } else {
+          await activate(cliente.idCliente);
         }
+        await obtenerClientes();
       } catch (error) {
         console.error("Error al eliminar el cliente:", error);
-      } finally {
-        mostrarDialogoEliminar.value = false;
       }
     };
 
