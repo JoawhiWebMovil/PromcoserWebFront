@@ -27,14 +27,12 @@
           <th>Teléfono</th>
           <th>Correo Electrónico</th>
           <th>Dirección</th>
+          <th>Estado</th>
+          <th>Editar</th>
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="cliente in clientes"
-          :key="cliente.idCliente"
-          @click="seleccionarCliente(cliente)"
-        >
+        <tr v-for="cliente in clientes" :key="cliente.idCliente">
           <td>{{ cliente.idCliente }}</td>
           <td>{{ cliente.nombre }}</td>
           <td>{{ cliente.apellido }}</td>
@@ -43,26 +41,25 @@
           <td>{{ cliente.telefono }}</td>
           <td>{{ cliente.correoElectronico }}</td>
           <td>{{ cliente.direccion }}</td>
+          <td>
+            <q-btn
+              @click="abrirDialogoEliminar(cliente)"
+              :label="mostrarActivos ? 'Desactivar' : 'Activar'"
+              color="negative"
+              flat
+            />
+          </td>
+          <td>
+            <q-btn
+              @click="abrirFormularioEdicion(cliente)"
+              label="Editar"
+              color="primary"
+              flat
+            />
+          </td>
         </tr>
       </tbody>
     </table>
-
-    <div v-if="clienteSeleccionado" class="cliente-seleccionado">
-      <div class="botones-editar-eliminar">
-        <q-btn
-          @click="abrirFormularioEdicion"
-          label="Editar Datos:"
-          color="primary"
-          class="editar-button"
-        />
-        <q-btn
-          @click="mostrarDialogoEliminar = true"
-          :label="mostrarActivos ? 'Desactivar' : 'Activar'"
-          color="negative"
-          class="eliminar-button"
-        />
-      </div>
-    </div>
 
     <div v-if="mostrarFormulario" class="modal-overlay">
       <div class="modal-content">
@@ -140,12 +137,13 @@ export default {
 
   setup() {
     const clientes = ref([]);
-    const clienteSeleccionado = ref(null);
     const clienteTemporal = reactive({});
     const mostrarFormulario = ref(false);
     const esNuevoCliente = ref(false);
-    const mostrarDialogoEliminar = ref(false);
+    const mostrarDialogoEliminar = ref(false); // Variable para controlar el pop-up
     const mostrarActivos = ref(true);
+    const statusCliente = ref(false);
+    const clienteSeleccionado = ref(null);
 
     const obtenerClientes = async () => {
       try {
@@ -162,13 +160,7 @@ export default {
       }
     };
 
-    const seleccionarCliente = (cliente) => {
-      clienteSeleccionado.value = cliente;
-      esNuevoCliente.value = false;
-    };
-
     const abrirFormularioCreacion = () => {
-      clienteSeleccionado.value = null;
       Object.assign(clienteTemporal, {
         nombre: "",
         apellido: "",
@@ -183,23 +175,26 @@ export default {
       mostrarFormulario.value = true;
     };
 
-    const abrirFormularioEdicion = () => {
-      if (clienteSeleccionado.value) {
-        Object.assign(clienteTemporal, { ...clienteSeleccionado.value });
-        esNuevoCliente.value = false;
-        mostrarFormulario.value = true;
-      }
+    const abrirFormularioEdicion = (cliente) => {
+      Object.assign(clienteTemporal, { ...cliente });
+      esNuevoCliente.value = false;
+      mostrarFormulario.value = true;
+    };
+
+    const abrirDialogoEliminar = (cliente) => {
+      clienteSeleccionado.value = cliente; // Asigna el cliente seleccionado
+      mostrarDialogoEliminar.value = true; // Muestra el diálogo
     };
 
     const guardarCambios = async () => {
       try {
         if (esNuevoCliente.value) {
           const { idCliente, ...entidadSinId } = clienteTemporal; // Quitar campo ID
+          console.log("Crear nuevo cliente", entidadSinId);
           await createCliente(entidadSinId);
         } else {
           await updateCliente(clienteTemporal);
         }
-        clienteSeleccionado.value = false;
         await obtenerClientes();
       } catch (error) {
         console.error("Error al guardar los cambios:", error);
@@ -209,32 +204,27 @@ export default {
     };
 
     const cancelarEdicion = () => {
-      clienteSeleccionado.value = false;
       mostrarFormulario.value = false;
       mostrarDialogoEliminar.value = false;
     };
 
     const eliminarCliente = async () => {
       try {
-        if (clienteSeleccionado.value) {
-          if (mostrarActivos.value) {
-            await deactivate(clienteSeleccionado.value.idCliente);
-          } else {
-            await activate(clienteSeleccionado.value.idCliente);
-          }
-          await obtenerClientes();
-          clienteSeleccionado.value = false;
+        if (mostrarActivos.value) {
+          await deactivate(clienteSeleccionado.value.idCliente);
+        } else {
+          await activate(clienteSeleccionado.value.idCliente);
         }
+        await obtenerClientes();
       } catch (error) {
         console.error("Error al eliminar el cliente:", error);
       } finally {
-        mostrarDialogoEliminar.value = false;
+        mostrarDialogoEliminar.value = false; // Cierra el diálogo
       }
     };
 
     const onToggleChange = (value) => {
       obtenerClientes();
-      clienteSeleccionado.value = false;
     };
 
     onMounted(() => {
@@ -243,12 +233,10 @@ export default {
 
     return {
       clientes,
-      clienteSeleccionado,
       clienteTemporal,
       mostrarFormulario,
       esNuevoCliente,
       mostrarDialogoEliminar, // Pasar la variable al template
-      seleccionarCliente,
       abrirFormularioCreacion,
       abrirFormularioEdicion,
       guardarCambios,
@@ -258,6 +246,9 @@ export default {
       onToggleChange,
       deactivate,
       activate,
+      statusCliente,
+      clienteSeleccionado,
+      abrirDialogoEliminar,
     };
   },
 };
