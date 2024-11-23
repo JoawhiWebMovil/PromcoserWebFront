@@ -293,6 +293,7 @@ export default {
       getAllRolsActive,
       obtenerRols,
       rols,
+      abrirDialogoEliminar
     };
   },
 };

@@ -21,14 +21,14 @@
         <tr>
           <th>Id</th>
           <th>Lugar</th>
+          <th>Estado</th>
+          <th>Editar</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="lugar in lugars" :key="lugar.idLugarTrabajo">
           <td>{{ lugar.idLugarTrabajo }}</td>
           <td>{{ lugar.descripcion }}</td>
-          <th>Estado</th>
-          <th>Editar</th>
           <td>
             <q-btn
               @click="abrirDialogoEliminar(lugar)"
@@ -99,7 +99,7 @@ export default {
     const lugarTemporal = reactive({});
     const mostrarFormulario = ref(false);
     const esNuevoLugar = ref(false);
-    const mostrarDialogoEliminar = ref(false); // Variable para contlugarar el pop-up
+    const mostrarDialogoEliminar = ref(false); // Variable para controlar el pop-up
     const mostrarActivos = ref(true);
 
     const obtenerLugars = async () => {
@@ -110,7 +110,7 @@ export default {
           lugars.value = await getAllLugarsInactive();
         }
       } catch (error) {
-        console.error("Error al obtener la información de los lugars:", error);
+        console.error("Error al obtener la información de los lugares:", error);
       }
     };
 
@@ -124,12 +124,12 @@ export default {
       mostrarFormulario.value = true;
     };
 
-    const abrirFormularioEdicion = () => {
-      if (lugarSeleccionado.value) {
-        Object.assign(lugarTemporal, { ...lugarSeleccionado.value });
+    const abrirFormularioEdicion = (lugar) => {
+        lugarSeleccionado.value = lugar
+        Object.assign(lugarTemporal, { ...lugar });
         esNuevoLugar.value = false;
         mostrarFormulario.value = true;
-      }
+
     };
 
     const guardarCambios = async () => {
@@ -140,7 +140,6 @@ export default {
         } else {
           await updateLugar(lugarTemporal);
         }
-        lugarSeleccionado.value = false;
         await obtenerLugars();
       } catch (error) {
         console.error("Error al guardar los cambios:", error);
@@ -150,21 +149,26 @@ export default {
     };
 
     const cancelarEdicion = () => {
-      lugarSeleccionado.value = false;
+      lugarSeleccionado.value = null;
       mostrarFormulario.value = false;
       mostrarDialogoEliminar.value = false;
+    };
+
+    const abrirDialogoEliminar = (lugar) => {
+      lugarSeleccionado.value = lugar;
+      mostrarDialogoEliminar.value = true;
     };
 
     const eliminarLugar = async () => {
       try {
         if (lugarSeleccionado.value) {
-          if (mostrarActivos.value) {
-            await deactivate(lugarSeleccionado.value.idLugarTrabajo);
+          const idLugar = lugarSeleccionado.value.idLugarTrabajo;
+          if (lugarSeleccionado.value.estado) {
+            await deactivate(idLugar);  // Desactivar lugar
           } else {
-            await activate(lugarSeleccionado.value.idLugarTrabajo);
+            await activate(idLugar);  // Activar lugar
           }
-          await obtenerLugars();
-          lugarSeleccionado.value = false;
+          await obtenerLugars(); // Cambiar de `false` a `null`
         }
       } catch (error) {
         console.error("Error al eliminar el lugar:", error);
@@ -173,9 +177,9 @@ export default {
       }
     };
 
-    const onToggleChange = (value) => {
+    const onToggleChange = () => {
       obtenerLugars();
-      lugarSeleccionado.value = false;
+      lugarSeleccionado.value = null;
     };
 
     onMounted(() => {
@@ -189,7 +193,6 @@ export default {
       mostrarFormulario,
       esNuevoLugar,
       mostrarDialogoEliminar, // Pasar la variable al template
-      seleccionarLugar,
       abrirFormularioCreacion,
       abrirFormularioEdicion,
       guardarCambios,
@@ -199,6 +202,7 @@ export default {
       onToggleChange,
       deactivate,
       activate,
+      abrirDialogoEliminar
     };
   },
 };

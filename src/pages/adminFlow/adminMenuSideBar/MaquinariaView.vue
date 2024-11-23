@@ -201,12 +201,17 @@ export default {
       mostrarFormulario.value = true;
     };
 
-    const abrirFormularioEdicion = () => {
-      if (maquinariaSeleccionado.value) {
-        Object.assign(maquinariaTemporal, { ...maquinariaSeleccionado.value });
+    const abrirFormularioEdicion = (maquinaria) => {
+
+        Object.assign(maquinariaTemporal, { ...maquinaria});
         esNuevoMaquinaria.value = false;
         mostrarFormulario.value = true;
-      }
+
+    };
+
+    const abrirDialogoEliminar = (maquinaria) => {
+      maquinariaSeleccionado.value = maquinaria; // Asigna el cliente seleccionado
+      mostrarDialogoEliminar.value = true; // Muestra el diálogo
     };
 
     const guardarCambios = async () => {
@@ -228,22 +233,18 @@ export default {
     };
 
     const cancelarEdicion = () => {
-      maquinariaSeleccionado.value = false;
       mostrarFormulario.value = false;
       mostrarDialogoEliminar.value = false;
     };
 
     const eliminarMaquinaria = async () => {
       try {
-        if (maquinariaSeleccionado.value) {
           if (mostrarActivos.value) {
             await deactivate(maquinariaSeleccionado.value.idMaquinaria);
           } else {
             await activate(maquinariaSeleccionado.value.idMaquinaria);
           }
           await obtenerMaquinarias();
-          maquinariaSeleccionado.value = false;
-        }
       } catch (error) {
         console.error("Error al eliminar el maquinaria:", error);
       } finally {
@@ -253,7 +254,6 @@ export default {
 
     const onToggleChange = (value) => {
       obtenerMaquinarias();
-      maquinariaSeleccionado.value = false;
     };
 
     onMounted(() => {
@@ -268,7 +268,6 @@ export default {
       mostrarFormulario,
       esNuevoMaquinaria,
       mostrarDialogoEliminar, // Pasar la variable al template
-      seleccionarMaquinaria,
       abrirFormularioCreacion,
       abrirFormularioEdicion,
       guardarCambios,
@@ -281,6 +280,7 @@ export default {
       getAllMarcasActive,
       obtenerMarcas,
       marcas,
+      abrirDialogoEliminar,
     };
   },
 };
