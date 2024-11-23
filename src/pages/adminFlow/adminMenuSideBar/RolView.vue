@@ -139,27 +139,12 @@ export default {
         if (esNuevoRol.value) {
           const { idRol, ...entidadSinId } = rolTemporal; // Quitar campo ID
           await createRol(entidadSinId);
-          this.$q.notify({
-            message: "Rol creado exitosamente.",
-            color: "positive",
-            position: "top",
-          });
         } else {
           await updateRol(rolTemporal);
-          this.$q.notify({
-            message: "Rol actualizado exitosamente.",
-            color: "positive",
-            position: "top",
-          });
         }
         await obtenerRols();
       } catch (error) {
         console.error("Error al guardar los cambios:", error);
-        this.$q.notify({
-          message: "Error al guardar los cambios.",
-          color: "negative",
-          position: "top",
-        });
       } finally {
         mostrarFormulario.value = false;
       }

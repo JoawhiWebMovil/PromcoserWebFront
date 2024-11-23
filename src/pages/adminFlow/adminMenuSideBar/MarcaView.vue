@@ -189,7 +189,6 @@ export default {
       mostrarFormulario,
       esNuevoMarca,
       mostrarDialogoEliminar, // Pasar la variable al template
-      seleccionarMarca,
       abrirFormularioCreacion,
       abrirFormularioEdicion,
       guardarCambios,
