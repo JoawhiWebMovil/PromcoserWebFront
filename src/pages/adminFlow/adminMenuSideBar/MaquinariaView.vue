@@ -27,14 +27,12 @@
           <th>Horometro Actual</th>
           <th>Tipo</th>
           <th>Año</th>
+          <th>Estado</th>
+          <th>Editar</th>
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="maquinaria in maquinarias"
-          :key="maquinaria.idMaquinaria"
-          @click="seleccionarMaquinaria(maquinaria)"
-        >
+        <tr v-for="maquinaria in maquinarias" :key="maquinaria.idMaquinaria">
           <td>{{ maquinaria.idMaquinaria }}</td>
           <td>{{ maquinaria.nombreMarca }}</td>
           <td>{{ maquinaria.placa }}</td>
@@ -43,26 +41,25 @@
           <td>{{ maquinaria.horometroActual }}</td>
           <td>{{ maquinaria.tipoMaquinaria }}</td>
           <td>{{ maquinaria.anoFabricacion }}</td>
+          <td>
+            <q-btn
+              @click="abrirDialogoEliminar(maquinaria)"
+              :label="mostrarActivos ? 'Desactivar' : 'Activar'"
+              color="negative"
+              flat
+            />
+          </td>
+          <td>
+            <q-btn
+              @click="abrirFormularioEdicion(maquinaria)"
+              label="Editar"
+              color="primary"
+              flat
+            />
+          </td>
         </tr>
       </tbody>
     </table>
-
-    <div v-if="maquinariaSeleccionado" class="maquinaria-seleccionado">
-      <div class="botones-editar-eliminar">
-        <q-btn
-          @click="abrirFormularioEdicion"
-          label="Editar Datos:"
-          color="primary"
-          class="editar-button"
-        />
-        <q-btn
-          @click="mostrarDialogoEliminar = true"
-          :label="mostrarActivos ? 'Desactivar' : 'Activar'"
-          color="negative"
-          class="eliminar-button"
-        />
-      </div>
-    </div>
 
     <div v-if="mostrarFormulario" class="modal-overlay">
       <div class="modal-content">
@@ -185,11 +182,6 @@ export default {
           error
         );
       }
-    };
-
-    const seleccionarMaquinaria = (maquinaria) => {
-      maquinariaSeleccionado.value = maquinaria;
-      esNuevoMaquinaria.value = false;
     };
 
     const abrirFormularioCreacion = () => {

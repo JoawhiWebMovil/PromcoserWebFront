@@ -21,32 +21,33 @@
         <tr>
           <th>Id</th>
           <th>Rol</th>
+          <th>Estado</th>
+          <th>Editar</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="rol in rols" :key="rol.idRol" @click="seleccionarRol(rol)">
+        <tr v-for="rol in rols" :key="rol.idRol">
           <td>{{ rol.idRol }}</td>
           <td>{{ rol.descripcionRol }}</td>
+          <td>
+            <q-btn
+              @click="abrirDialogoEliminar(rol)"
+              :label="mostrarActivos ? 'Desactivar' : 'Activar'"
+              color="negative"
+              flat
+            />
+          </td>
+          <td>
+            <q-btn
+              @click="abrirFormularioEdicion(rol)"
+              label="Editar"
+              color="primary"
+              flat
+            />
+          </td>
         </tr>
       </tbody>
     </table>
-
-    <div v-if="rolSeleccionado" class="rol-seleccionado">
-      <div class="botones-editar-eliminar">
-        <q-btn
-          @click="abrirFormularioEdicion"
-          label="Editar Datos:"
-          color="primary"
-          class="editar-button"
-        />
-        <q-btn
-          @click="mostrarDialogoEliminar = true"
-          :label="mostrarActivos ? 'Desactivar' : 'Activar'"
-          color="negative"
-          class="eliminar-button"
-        />
-      </div>
-    </div>
 
     <div v-if="mostrarFormulario" class="modal-overlay">
       <div class="modal-content">
@@ -98,24 +99,22 @@ export default {
     const rolTemporal = reactive({});
     const mostrarFormulario = ref(false);
     const esNuevoRol = ref(false);
-    const mostrarDialogoEliminar = ref(false); // Variable para controlar el pop-up
+    const mostrarDialogoEliminar = ref(false); // Controla el pop-up
     const mostrarActivos = ref(true);
 
     const obtenerRols = async () => {
       try {
-        if (mostrarActivos.value) {
-          rols.value = await getAllRolsActive();
-        } else {
-          rols.value = await getAllRolsInactive();
-        }
+        rols.value = mostrarActivos.value
+          ? await getAllRolsActive()
+          : await getAllRolsInactive();
       } catch (error) {
-        console.error("Error al obtener la información de los rols:", error);
+        console.error("Error al obtener roles:", error);
+        this.$q.notify({
+          message: "No se pudieron cargar los roles.",
+          color: "negative",
+          position: "top",
+        });
       }
-    };
-
-    const seleccionarRol = (rol) => {
-      rolSeleccionado.value = rol;
-      esNuevoRol.value = false;
     };
 
     const abrirFormularioCreacion = () => {
@@ -128,12 +127,11 @@ export default {
       mostrarFormulario.value = true;
     };
 
-    const abrirFormularioEdicion = () => {
-      if (rolSeleccionado.value) {
-        Object.assign(rolTemporal, { ...rolSeleccionado.value });
-        esNuevoRol.value = false;
-        mostrarFormulario.value = true;
-      }
+    const abrirFormularioEdicion = (rol) => {
+      rolSeleccionado.value = rol;
+      Object.assign(rolTemporal, { ...rol });
+      esNuevoRol.value = false;
+      mostrarFormulario.value = true;
     };
 
     const guardarCambios = async () => {
@@ -141,45 +139,73 @@ export default {
         if (esNuevoRol.value) {
           const { idRol, ...entidadSinId } = rolTemporal; // Quitar campo ID
           await createRol(entidadSinId);
+          this.$q.notify({
+            message: "Rol creado exitosamente.",
+            color: "positive",
+            position: "top",
+          });
         } else {
           await updateRol(rolTemporal);
+          this.$q.notify({
+            message: "Rol actualizado exitosamente.",
+            color: "positive",
+            position: "top",
+          });
         }
-        rolSeleccionado.value = false;
         await obtenerRols();
       } catch (error) {
         console.error("Error al guardar los cambios:", error);
+        this.$q.notify({
+          message: "Error al guardar los cambios.",
+          color: "negative",
+          position: "top",
+        });
       } finally {
         mostrarFormulario.value = false;
       }
     };
 
     const cancelarEdicion = () => {
-      rolSeleccionado.value = false;
+      rolSeleccionado.value = null;
       mostrarFormulario.value = false;
       mostrarDialogoEliminar.value = false;
     };
 
+    const abrirDialogoEliminar = (rol) => {
+      rolSeleccionado.value = rol;
+      mostrarDialogoEliminar.value = true;
+    };
+
     const eliminarRol = async () => {
       try {
-        if (rolSeleccionado.value) {
-          if (mostrarActivos.value) {
-            await deactivate(rolSeleccionado.value.idRol);
-          } else {
-            await activate(rolSeleccionado.value.idRol);
-          }
-          await obtenerRols();
-          rolSeleccionado.value = false;
+        if (mostrarActivos.value) {
+          await deactivate(rolSeleccionado.value.idRol);
+        } else {
+          await activate(rolSeleccionado.value.idRol);
         }
+        await obtenerRols();
+        this.$q.notify({
+          message: `Rol ${
+            mostrarActivos.value ? "desactivado" : "activado"
+          } exitosamente.`,
+          color: "positive",
+          position: "top",
+        });
       } catch (error) {
-        console.error("Error al eliminar el rol:", error);
+        console.error("Error al actualizar el estado del rol:", error);
+        this.$q.notify({
+          message: "Error al actualizar el estado del rol.",
+          color: "negative",
+          position: "top",
+        });
       } finally {
         mostrarDialogoEliminar.value = false;
       }
     };
 
-    const onToggleChange = (value) => {
+    const onToggleChange = () => {
       obtenerRols();
-      rolSeleccionado.value = false;
+      rolSeleccionado.value = null;
     };
 
     onMounted(() => {
@@ -192,21 +218,20 @@ export default {
       rolTemporal,
       mostrarFormulario,
       esNuevoRol,
-      mostrarDialogoEliminar, // Pasar la variable al template
-      seleccionarRol,
+      mostrarDialogoEliminar,
       abrirFormularioCreacion,
       abrirFormularioEdicion,
       guardarCambios,
       cancelarEdicion,
+      abrirDialogoEliminar,
       eliminarRol,
       mostrarActivos,
       onToggleChange,
-      deactivate,
-      activate,
     };
   },
 };
 </script>
+
 
 <style scoped>
 .rols-table {
