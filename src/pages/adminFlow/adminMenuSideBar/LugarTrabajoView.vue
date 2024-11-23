@@ -24,33 +24,30 @@
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="lugar in lugars"
-          :key="lugar.idLugarTrabajo"
-          @click="seleccionarLugar(lugar)"
-        >
+        <tr v-for="lugar in lugars" :key="lugar.idLugarTrabajo">
           <td>{{ lugar.idLugarTrabajo }}</td>
           <td>{{ lugar.descripcion }}</td>
+          <th>Estado</th>
+          <th>Editar</th>
+          <td>
+            <q-btn
+              @click="abrirDialogoEliminar(lugar)"
+              :label="mostrarActivos ? 'Desactivar' : 'Activar'"
+              color="negative"
+              flat
+            />
+          </td>
+          <td>
+            <q-btn
+              @click="abrirFormularioEdicion(lugar)"
+              label="Editar"
+              color="primary"
+              flat
+            />
+          </td>
         </tr>
       </tbody>
     </table>
-
-    <div v-if="lugarSeleccionado" class="lugar-seleccionado">
-      <div class="botones-editar-eliminar">
-        <q-btn
-          @click="abrirFormularioEdicion"
-          label="Editar Datos:"
-          color="primary"
-          class="editar-button"
-        />
-        <q-btn
-          @click="mostrarDialogoEliminar = true"
-          :label="mostrarActivos ? 'Desactivar' : 'Activar'"
-          color="negative"
-          class="eliminar-button"
-        />
-      </div>
-    </div>
 
     <div v-if="mostrarFormulario" class="modal-overlay">
       <div class="modal-content">
@@ -115,11 +112,6 @@ export default {
       } catch (error) {
         console.error("Error al obtener la información de los lugars:", error);
       }
-    };
-
-    const seleccionarLugar = (lugar) => {
-      lugarSeleccionado.value = lugar;
-      esNuevoLugar.value = false;
     };
 
     const abrirFormularioCreacion = () => {

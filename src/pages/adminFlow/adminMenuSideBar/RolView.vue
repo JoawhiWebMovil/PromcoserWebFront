@@ -21,32 +21,33 @@
         <tr>
           <th>Id</th>
           <th>Rol</th>
+          <th>Estado</th>
+          <th>Editar</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="rol in rols" :key="rol.idRol" @click="seleccionarRol(rol)">
+        <tr v-for="rol in rols" :key="rol.idRol">
           <td>{{ rol.idRol }}</td>
           <td>{{ rol.descripcionRol }}</td>
+          <td>
+            <q-btn
+              @click="abrirDialogoEliminar(rol)"
+              :label="mostrarActivos ? 'Desactivar' : 'Activar'"
+              color="negative"
+              flat
+            />
+          </td>
+          <td>
+            <q-btn
+              @click="abrirFormularioEdicion(rol)"
+              label="Editar"
+              color="primary"
+              flat
+            />
+          </td>
         </tr>
       </tbody>
     </table>
-
-    <div v-if="rolSeleccionado" class="rol-seleccionado">
-      <div class="botones-editar-eliminar">
-        <q-btn
-          @click="abrirFormularioEdicion"
-          label="Editar Datos:"
-          color="primary"
-          class="editar-button"
-        />
-        <q-btn
-          @click="mostrarDialogoEliminar = true"
-          :label="mostrarActivos ? 'Desactivar' : 'Activar'"
-          color="negative"
-          class="eliminar-button"
-        />
-      </div>
-    </div>
 
     <div v-if="mostrarFormulario" class="modal-overlay">
       <div class="modal-content">
@@ -111,11 +112,6 @@ export default {
       } catch (error) {
         console.error("Error al obtener la información de los rols:", error);
       }
-    };
-
-    const seleccionarRol = (rol) => {
-      rolSeleccionado.value = rol;
-      esNuevoRol.value = false;
     };
 
     const abrirFormularioCreacion = () => {

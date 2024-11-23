@@ -29,14 +29,12 @@
           <th>Direccion</th>
           <th>F. Ingerso</th>
           <th>F. Nacimiento</th>
+          <th>Estado</th>
+          <th>Editar</th>
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="personal in personals"
-          :key="personal.idPersonal"
-          @click="seleccionarPersonal(personal)"
-        >
+        <tr v-for="personal in personals" :key="personal.idPersonal">
           <td>{{ personal.idPersonal }}</td>
           <td>{{ personal.nombre }}</td>
           <td>{{ personal.apellido }}</td>
@@ -47,26 +45,25 @@
           <td>{{ personal.direccion }}</td>
           <td>{{ personal.fechaIngreso }}</td>
           <td>{{ personal.fechaNacimiento }}</td>
+          <td>
+            <q-btn
+              @click="abrirDialogoEliminar(personal)"
+              :label="mostrarActivos ? 'Desactivar' : 'Activar'"
+              color="negative"
+              flat
+            />
+          </td>
+          <td>
+            <q-btn
+              @click="abrirFormularioEdicion(personal)"
+              label="Editar"
+              color="primary"
+              flat
+            />
+          </td>
         </tr>
       </tbody>
     </table>
-
-    <div v-if="personalSeleccionado" class="personal-seleccionado">
-      <div class="botones-editar-eliminar">
-        <q-btn
-          @click="abrirFormularioEdicion"
-          label="Editar Datos:"
-          color="primary"
-          class="editar-button"
-        />
-        <q-btn
-          @click="mostrarDialogoEliminar = true"
-          :label="mostrarActivos ? 'Desactivar' : 'Activar'"
-          color="negative"
-          class="eliminar-button"
-        />
-      </div>
-    </div>
 
     <div v-if="mostrarFormulario" class="modal-overlay">
       <div class="modal-content">
@@ -199,11 +196,6 @@ export default {
           error
         );
       }
-    };
-
-    const seleccionarPersonal = (personal) => {
-      personalSeleccionado.value = personal;
-      esNuevoPersonal.value = false;
     };
 
     const abrirFormularioCreacion = () => {

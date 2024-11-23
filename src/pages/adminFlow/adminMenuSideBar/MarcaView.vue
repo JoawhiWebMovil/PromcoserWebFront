@@ -21,36 +21,33 @@
         <tr>
           <th>Id</th>
           <th>Marca</th>
+          <th>Estado</th>
+          <th>Editar</th>
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="marca in marcas"
-          :key="marca.idMarca"
-          @click="seleccionarMarca(marca)"
-        >
+        <tr v-for="marca in marcas" :key="marca.idMarca">
           <td>{{ marca.idMarca }}</td>
           <td>{{ marca.nombreMarca }}</td>
+          <td>
+            <q-btn
+              @click="abrirDialogoEliminar(marca)"
+              :label="mostrarActivos ? 'Desactivar' : 'Activar'"
+              color="negative"
+              flat
+            />
+          </td>
+          <td>
+            <q-btn
+              @click="abrirFormularioEdicion(marca)"
+              label="Editar"
+              color="primary"
+              flat
+            />
+          </td>
         </tr>
       </tbody>
     </table>
-
-    <div v-if="marcaSeleccionado" class="marca-seleccionado">
-      <div class="botones-editar-eliminar">
-        <q-btn
-          @click="abrirFormularioEdicion"
-          label="Editar Datos:"
-          color="primary"
-          class="editar-button"
-        />
-        <q-btn
-          @click="mostrarDialogoEliminar = true"
-          :label="mostrarActivos ? 'Desactivar' : 'Activar'"
-          color="negative"
-          class="eliminar-button"
-        />
-      </div>
-    </div>
 
     <div v-if="mostrarFormulario" class="modal-overlay">
       <div class="modal-content">
@@ -115,11 +112,6 @@ export default {
       } catch (error) {
         console.error("Error al obtener la información de los marcas:", error);
       }
-    };
-
-    const seleccionarMarca = (marca) => {
-      marcaSeleccionado.value = marca;
-      esNuevoMarca.value = false;
     };
 
     const abrirFormularioCreacion = () => {
