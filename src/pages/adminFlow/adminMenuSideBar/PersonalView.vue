@@ -167,13 +167,14 @@ export default {
 
   setup() {
     const personals = ref([]);
-    const personalSeleccionado = ref(null);
     const personalTemporal = reactive({});
     const mostrarFormulario = ref(false);
     const esNuevoPersonal = ref(false);
     const mostrarDialogoEliminar = ref(false); // Variable para controlar el pop-up
     const mostrarActivos = ref(true);
     const rols = ref([]);
+    const statusPersonal = ref(false);
+    const personalSeleccionado = ref(null);
 
     const obtenerRols = async () => {
       try {
@@ -217,24 +218,25 @@ export default {
       mostrarFormulario.value = true;
     };
 
-    const abrirFormularioEdicion = () => {
-      if (personalSeleccionado.value) {
-        Object.assign(personalTemporal, { ...personalSeleccionado.value });
+    const abrirFormularioEdicion = (personal) => {
+        Object.assign(personalTemporal, { ...personal });
         esNuevoPersonal.value = false;
         mostrarFormulario.value = true;
-      }
+    };
+
+    const abrirDialogoEliminar = (personal) => {
+      personalSeleccionado.value = personal; // Asigna el cliente seleccionado
+      mostrarDialogoEliminar.value = true; // Muestra el diálogo
     };
 
     const guardarCambios = async () => {
       try {
-        delete personalTemporal.descripcionRol;
         if (esNuevoPersonal.value) {
           const { idPersonal, ...entidadSinId } = personalTemporal; // Quitar campo ID
           await createPersonal(entidadSinId);
         } else {
           await updatePersonal(personalTemporal);
         }
-        personalSeleccionado.value = false;
         await obtenerPersonals();
       } catch (error) {
         console.error("Error al guardar los cambios:", error);
@@ -244,22 +246,18 @@ export default {
     };
 
     const cancelarEdicion = () => {
-      personalSeleccionado.value = false;
       mostrarFormulario.value = false;
       mostrarDialogoEliminar.value = false;
     };
 
     const eliminarPersonal = async () => {
       try {
-        if (personalSeleccionado.value) {
           if (mostrarActivos.value) {
             await deactivate(personalSeleccionado.value.idPersonal);
           } else {
             await activate(personalSeleccionado.value.idPersonal);
           }
           await obtenerPersonals();
-          personalSeleccionado.value = false;
-        }
       } catch (error) {
         console.error("Error al eliminar el personal:", error);
       } finally {
@@ -269,7 +267,6 @@ export default {
 
     const onToggleChange = (value) => {
       obtenerPersonals();
-      personalSeleccionado.value = false;
     };
 
     onMounted(() => {
@@ -284,7 +281,6 @@ export default {
       mostrarFormulario,
       esNuevoPersonal,
       mostrarDialogoEliminar, // Pasar la variable al template
-      seleccionarPersonal,
       abrirFormularioCreacion,
       abrirFormularioEdicion,
       guardarCambios,

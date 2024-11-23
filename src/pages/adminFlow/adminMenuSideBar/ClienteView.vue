@@ -236,7 +236,6 @@ export default {
       clienteTemporal,
       mostrarFormulario,
       esNuevoCliente,
-      mostrarDialogoEliminar, // Pasar la variable al template
       abrirFormularioCreacion,
       abrirFormularioEdicion,
       guardarCambios,
@@ -248,7 +247,8 @@ export default {
       activate,
       statusCliente,
       clienteSeleccionado,
-      abrirDialogoEliminar,
+      mostrarDialogoEliminar,
+      abrirDialogoEliminar
     };
   },
 };
