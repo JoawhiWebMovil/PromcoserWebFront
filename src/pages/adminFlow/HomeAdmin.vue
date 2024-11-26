@@ -18,7 +18,7 @@
           style="display: flex; align-items: center; justify-content: flex-end"
         >
           <div class="code-text" style="font-size: 16px; font-weight: 500">
-            Codigo: 21100165
+            Código: 21100165
           </div>
 
           <q-btn
@@ -29,6 +29,16 @@
             icon="home"
             aria-label="Home"
             @click="goToHome"
+            style="margin-left: 10px"
+          />
+          <!-- Botón de Logout -->
+          <q-btn
+            flat
+            dense
+            round
+            icon="logout"
+            aria-label="Logout"
+            @click="logout"
             style="margin-left: 10px"
           />
         </div>
@@ -122,6 +132,11 @@ function goToHome() {
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
+}
+
+function logout() {
+  // Lógica adicional, como limpiar datos de sesión
+  router.push("/"); // Redirige a la página de login
 }
 </script>
 
