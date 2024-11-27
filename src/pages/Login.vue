@@ -2,6 +2,7 @@
   <div class="full-screen-container flex flex-center">
     <div class="q-pa-md form-container">
       <q-card>
+        <!-- Logo -->
         <q-card-section class="q-pt-none text-center">
           <img
             src="../assets/logoLogin.png"
@@ -9,11 +10,16 @@
             class="login-logo"
           />
         </q-card-section>
+
+        <!-- Título -->
         <q-card-section class="q-pt-none">
-          <div class="text-h6">Iniciar sesión</div>
+          <div class="text-h6 text-center">Iniciar sesión</div>
         </q-card-section>
+
+        <!-- Formulario -->
         <form @submit.prevent="logIn">
           <q-card-section>
+            <!-- Campo de Usuario -->
             <q-input
               v-model="username"
               label="Nombre de usuario"
@@ -22,16 +28,28 @@
               autocomplete="username"
               filled
             />
+
+            <!-- Campo de Contraseña con Ojito -->
             <q-input
               v-model="password"
-              type="password"
+              :type="showPassword ? 'text' : 'password'"
               label="Contraseña"
               placeholder="Ingresa tu contraseña"
               autocomplete="current-password"
               filled
-            />
+              append
+            >
+              <template v-slot:append>
+                <q-icon
+                  :name="showPassword ? 'visibility' : 'visibility_off'"
+                  class="cursor-pointer"
+                  @click="togglePasswordVisibility"
+                />
+              </template>
+            </q-input>
           </q-card-section>
 
+          <!-- Botón de Inicio de Sesión -->
           <q-card-actions align="center">
             <q-btn
               type="submit"
@@ -57,6 +75,7 @@ export default {
   setup() {
     const username = ref("");
     const password = ref("");
+    const showPassword = ref(false); // Estado para controlar la visibilidad de la contraseña
     const router = useRouter(); // Inicializamos el enrutador
 
     const logIn = async () => {
@@ -83,6 +102,10 @@ export default {
       }
     };
 
+    const togglePasswordVisibility = () => {
+      showPassword.value = !showPassword.value;
+    };
+
     const navigateToHome = () => {
       router.push("/homeAdmin");
     };
@@ -90,7 +113,9 @@ export default {
     return {
       username,
       password,
+      showPassword,
       logIn,
+      togglePasswordVisibility,
       navigateToHome,
     };
   },
@@ -125,5 +150,9 @@ export default {
 .login-logo {
   width: 80%;
   margin-top: 20px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
 </style>

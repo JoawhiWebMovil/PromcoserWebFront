@@ -1,8 +1,10 @@
 <template>
   <q-page class="bg-light-gray">
-    <div v-if="data" class="content-wrapper">
+    <!-- Verifica si 'data' tiene un valor antes de mostrar -->
+    <div v-if="data && data.resumenProyectos" class="content-wrapper">
       <h2 class="title">Información General de la Empresa</h2>
 
+      <!-- Resumen de Proyectos -->
       <div class="section">
         <h3 class="section-title">Resumen de Proyectos</h3>
         <q-card class="info-card">
@@ -35,6 +37,7 @@
         </q-card>
       </div>
 
+      <!-- Resumen Financiero -->
       <div class="section">
         <h3 class="section-title">Resumen Financiero</h3>
         <q-card class="info-card">
@@ -61,6 +64,7 @@
         </q-card>
       </div>
 
+      <!-- Estado de la Maquinaria -->
       <div class="section">
         <h3 class="section-title">Estado de la Maquinaria</h3>
         <q-card class="info-card">
@@ -87,6 +91,7 @@
         </q-card>
       </div>
 
+      <!-- Gestión de Personal -->
       <div class="section">
         <h3 class="section-title">Gestión de Personal</h3>
         <q-card class="info-card">
@@ -113,6 +118,7 @@
         </q-card>
       </div>
 
+      <!-- Alertas y Notificaciones -->
       <div class="section">
         <h3 class="section-title">Alertas y Notificaciones</h3>
         <q-card class="info-card">
@@ -130,6 +136,7 @@
         </q-card>
       </div>
 
+      <!-- Documentos Recientes -->
       <div class="section">
         <h3 class="section-title">Documentos Recientes</h3>
         <q-card class="info-card">
@@ -148,6 +155,7 @@
       </div>
     </div>
 
+    <!-- Si 'data' está vacío, muestra el mensaje de carga -->
     <div v-else class="loading-message">
       <q-spinner color="primary" size="50px" />
       <p>Cargando datos...</p>
@@ -157,18 +165,22 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { loadData } from "../../../services/loadData";
+import { loadData } from "../../../services/loadData"; // Asegúrate de que la ruta de carga es correcta
 
+// Estado reactivo para almacenar los datos cargados
 const data = ref(null);
 
+// Llamada al servicio para cargar los datos
 onMounted(async () => {
   try {
     data.value = await loadData();
+    console.log("Datos cargados:", data.value); // Log para depuración
   } catch (error) {
     console.error("Error al cargar los datos:", error);
   }
 });
 
+// Función para formatear los números como moneda
 const formatCurrency = (value) => {
   return new Intl.NumberFormat("es-PE", {
     style: "currency",

@@ -1,4 +1,4 @@
-import { apiClient } from "../../boot/axios";
+import { apiClient } from "src/boot/axios";
 
 export const getAllClientesActive = async () => {
   try {
