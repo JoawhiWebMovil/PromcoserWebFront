@@ -11,25 +11,15 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title>
-          Bienvenido Joaquin
-        </q-toolbar-title>
+        <q-toolbar-title> Bienvenido Joaquin </q-toolbar-title>
 
         <div>Codigo: 21100165</div>
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
+    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list>
-        <q-item-label
-          header
-        >
-        Registro de Datos
-        </q-item-label>
+        <q-item-label header> Registro de Datos </q-item-label>
 
         <EssentialLink
           v-for="link in linksList"
@@ -46,31 +36,31 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import EssentialLink from 'src/components/MenuSidebar.vue'
+import { ref } from "vue";
+import EssentialLink from "src/components/MenuSidebar.vue";
 
 defineOptions({
-  name: 'MainLayout'
-})
+  name: "MainLayout",
+});
 
 const linksList = [
   {
-    title: 'Empleados',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: '/empleados'
+    title: "Empleados",
+    caption: "quasar.dev",
+    icon: "school",
+    link: "/empleados",
   },
   {
-    title: 'Maquinaria',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: '/empleados'
-  }
-]
+    title: "Maquinaria",
+    caption: "quasar.dev",
+    icon: "school",
+    link: "/empleados",
+  },
+];
 
-const leftDrawerOpen = ref(false)
+const leftDrawerOpen = ref(false);
 
-function toggleLeftDrawer () {
-  leftDrawerOpen.value = !leftDrawerOpen.value
+function toggleLeftDrawer() {
+  leftDrawerOpen.value = !leftDrawerOpen.value;
 }
 </script>
