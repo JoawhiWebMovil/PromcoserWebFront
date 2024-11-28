@@ -5,12 +5,13 @@
         @click="abrirFormularioCreacion"
         label="Crear Cliente"
         class="crear-cliente-button"
-        color="primary"
+        color="red"
+        icon="add_circle_outline"
       />
       <q-toggle
         v-model="mostrarActivos"
         label="Estado"
-        color="primary"
+        color="green"
         class="activo-toggle"
         left-label
         @update:model-value="onToggleChange"
@@ -54,6 +55,7 @@
               @click="abrirFormularioEdicion(cliente)"
               label="Editar"
               color="primary"
+              icon="edit"
               flat
             />
           </td>
@@ -255,71 +257,157 @@ export default {
 </script>
 
 <style scoped>
+/* Estilo solo para la tabla de clientes */
 .clientes-table {
   width: 80%;
-  margin-top: 70px;
+  margin-top: 40px;
   border-collapse: collapse;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   margin-left: auto;
   margin-right: auto;
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: center;
 }
 
-.clientes-table th,
-.clientes-table td {
-  padding: 12px;
-  text-align: left;
-}
-
+/* Estilo para los encabezados de la tabla de clientes */
 .clientes-table th {
-  background-color: #1e3a8a;
+  background-color: #b91c1c; /* Azul para el encabezado */
   color: white;
   font-size: 16px;
+  text-transform: uppercase;
+  padding: 12px;
+  text-align: center;
 }
 
+/* Estilo para las celdas de la tabla de clientes */
 .clientes-table td {
   background-color: #f9fafb;
   color: #333;
   font-size: 14px;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 12px;
+  text-align: center;
 }
 
+/* Estilo para las filas alternadas en la tabla de clientes */
 .clientes-table tr:nth-child(even) td {
   background-color: #e5e7eb;
 }
 
+/* Estilo para el hover de las filas en la tabla de clientes */
 .clientes-table tr:hover td {
-  background-color: #e0e7ff;
+  background-color: #fddede; /* Rojo claro para hover */
 }
 
-.clientes-table td {
-  border-bottom: 1px solid #ddd;
-}
-
+/* Estilo para el cuadro de cliente seleccionado */
 .cliente-seleccionado {
   margin-top: 50px;
   font-size: 18px;
   text-align: left;
 }
 
+/* Estilo para los botones de editar y eliminar */
 .botones-editar-eliminar {
   display: flex;
   justify-content: space-between;
-  margin-top: 50px;
+  margin-top: 30px;
   font-size: 18px;
   text-align: left;
+  align-items: center;
 }
 
-.editar-button {
-  margin-left: 8%;
-  width: 20%;
+/* Botón de crear cliente */
+.crear-cliente-button {
+  margin-left: 10%;
+  padding: 12px 24px;
+  font-size: 16px;
+  background-color: #e53e3e; /* Rojo para el botón de crear cliente */
+  color: white;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
+/* Estilos para el formulario de crear/editar cliente */
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 12px; /* Bordes redondeados */
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); /* Sombra suave para dar profundidad */
+  width: 80%;
+  max-width: 800px;
+  margin: 0 auto; /* Centra el formulario horizontalmente */
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column; /* Hace que el contenido del formulario esté en columna */
+  align-items: center;
+}
+
+.modal-content h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+  font-weight: 600;
+  text-align: center; /* Centra el título */
+}
+
+/* Usamos Grid para dividir el formulario en 2 filas y 4 columnas */
+.modal-content form {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columnas con igual tamaño */
+  gap: 20px;
+  width: 100%; /* Asegura que el formulario ocupe todo el ancho */
+}
+
+/* Estilo para las etiquetas */
+.modal-content label {
+  display: block;
+  font-weight: bold;
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+/* Estilo para los campos de entrada (select y input) */
+.modal-content select,
+.modal-content input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Estilo para los botones dentro del formulario */
+.modal-content button {
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  background-color: #e53e3e; /* Rojo para el botón */
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+/* Estilo para el toggle de estado activo */
 .activo-toggle {
   margin-right: 8%;
+  color: #af1712; /* Cambiar el color del texto o la etiqueta */
 }
 
-.eliminar-button {
-  margin-right: 8%;
-  width: 20%;
+.activo-toggle .q-toggle__control {
+  border: 2px solid #b91c1c; /* Cambiar el color del borde */
+}
+
+/* Para que los campos se ajusten bien en pantallas pequeñas */
+@media (max-width: 768px) {
+  .modal-content form {
+    grid-template-columns: 1fr 1fr; /* En pantallas pequeñas, dos columnas */
+  }
 }
 
 .modal-overlay {
@@ -328,47 +416,20 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro con opacidad */
   display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+  justify-content: center;  /* Centra el contenido horizontalmente */
+  align-items: center;      /* Centra el contenido verticalmente */
+  z-index: 999;             /* Asegura que el formulario esté encima de otros elementos */
 }
 
-.modal-content {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 500px;
-  max-width: 90%;
+.activo-toggle {
+  margin-right: 8%;
+  color: #af1712; /* Cambiar el color del texto o la etiqueta */
 }
 
-.modal-content label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: bold;
+.activo-toggle .q-toggle__control {
+  border: 2px solid #b91c1c; /* Cambiar el color del borde */
 }
 
-.modal-content input {
-  width: calc(100% - 20px);
-  padding: 8px;
-  margin-bottom: 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.modal-content button {
-  margin-right: 10px;
-}
-
-body.modal-open {
-  overflow: hidden;
-}
-
-.crear-cliente-button {
-  margin-left: 8%;
-  margin-top: 20px;
-  padding: 10px 20px;
-}
 </style>

@@ -1,8 +1,9 @@
 import { boot } from "quasar/wrappers";
 import axios from "axios";
 
-const baseuUrl = "https://ff11-38-25-17-64.ngrok-free.app/";
-// const baseuUrl = "https://9809-38-25-17-64.ngrok-free.app/"; Tunel actual
+const baseuUrl = "http://localhost:5159";
+// const baseuUrl = "https://ff11-38-25-17-64.ngrok-free.app/"; Tunel actual
+//http://localhost/5159
 
 const apiClient = axios.create({
   baseURL: baseuUrl,
