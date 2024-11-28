@@ -42,6 +42,11 @@ const routes = [
         component: () =>
           import("src/pages/adminFlow/adminMenuSideBar/MarcaView.vue"),
       },
+      {
+        path: "parteDiario",
+        component: () =>
+          import("src/pages/adminFlow/adminMenuSideBar/ParteDiario.vue"),
+      },
     ],
   },
 

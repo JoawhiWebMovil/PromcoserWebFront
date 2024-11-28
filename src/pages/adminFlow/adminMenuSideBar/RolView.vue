@@ -111,11 +111,6 @@ export default {
           : await getAllRolsInactive();
       } catch (error) {
         console.error("Error al obtener roles:", error);
-        this.$q.notify({
-          message: "No se pudieron cargar los roles.",
-          color: "negative",
-          position: "top",
-        });
       }
     };
 
@@ -171,20 +166,8 @@ export default {
           await activate(rolSeleccionado.value.idRol);
         }
         await obtenerRols();
-        this.$q.notify({
-          message: `Rol ${
-            mostrarActivos.value ? "desactivado" : "activado"
-          } exitosamente.`,
-          color: "positive",
-          position: "top",
-        });
       } catch (error) {
         console.error("Error al actualizar el estado del rol:", error);
-        this.$q.notify({
-          message: "Error al actualizar el estado del rol.",
-          color: "negative",
-          position: "top",
-        });
       } finally {
         mostrarDialogoEliminar.value = false;
       }
@@ -218,7 +201,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 /* Estilos generales de la tabla de roles */
@@ -325,9 +307,9 @@ export default {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro con opacidad */
   display: flex;
-  justify-content: center;  /* Centra el contenido horizontalmente */
-  align-items: center;      /* Centra el contenido verticalmente */
-  z-index: 1000;             /* Asegura que el modal esté encima de otros elementos */
+  justify-content: center; /* Centra el contenido horizontalmente */
+  align-items: center; /* Centra el contenido verticalmente */
+  z-index: 1000; /* Asegura que el modal esté encima de otros elementos */
 }
 
 .modal-content {
@@ -413,5 +395,4 @@ export default {
 body.modal-open {
   overflow: hidden;
 }
-
 </style>

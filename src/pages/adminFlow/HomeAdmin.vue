@@ -12,6 +12,16 @@
           @click="toggleLeftDrawer"
         />
         <q-toolbar-title> Buen día, {{ username }} </q-toolbar-title>
+        <q-btn
+          v-if="!isOnHomePage"
+          flat
+          dense
+          round
+          icon="home"
+          aria-label="Home"
+          @click="goToHome"
+          style="margin-left: 10px"
+        />
       </q-toolbar>
     </q-header>
 
@@ -69,7 +79,11 @@
 import { ref, computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
-const username = computed(() => "Admin"); // Mock username for now
+const userData = localStorage.getItem("userData");
+const username = computed(() => {
+  const parsedData = JSON.parse(userData);
+  return `${parsedData.nombre} ${parsedData.apellido}`;
+});
 const leftDrawerOpen = ref(false);
 const miniState = ref(true); // State to control mini-drawer effect
 const router = useRouter();
@@ -105,6 +119,11 @@ const linksList = [
     title: "Marca",
     icon: "directions_car",
     link: "/homeAdmin/marca",
+  },
+  {
+    title: "Parte Diario",
+    icon: "description",
+    link: "/homeAdmin/parteDiario",
   },
 ];
 
