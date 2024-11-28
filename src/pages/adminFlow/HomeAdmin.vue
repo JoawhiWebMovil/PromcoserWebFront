@@ -1,6 +1,7 @@
 <template>
-  <q-layout view="lHh lpR lFf">
-    <q-header elevated>
+  <q-layout view="lHh lpR lFf" class="shadow-2 rounded-borders">
+    <!-- Cabecera con color rojo -->
+    <q-header elevated class="bg-red-6">
       <q-toolbar>
         <q-btn
           flat
@@ -10,51 +11,52 @@
           aria-label="Menu"
           @click="toggleLeftDrawer"
         />
-
         <q-toolbar-title> Buen día, {{ username }} </q-toolbar-title>
-
-        <div
-          class="q-gutter-sm"
-          style="display: flex; align-items: center; justify-content: flex-end"
-        >
-          <div class="code-text" style="font-size: 16px; font-weight: 500">
-            Codigo: 21100165
-          </div>
-
-          <q-btn
-            v-if="!isOnHomePage"
-            flat
-            dense
-            round
-            icon="home"
-            aria-label="Home"
-            @click="goToHome"
-            style="margin-left: 10px"
-          />
-        </div>
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" bordered overlay>
-      <q-list>
-        <q-item-label header>
-          Registro de Datos
-          <q-btn
-            flat
-            dense
-            round
-            icon="arrow_back"
-            class="float-right"
-            @click="toggleLeftDrawer"
-          />
-        </q-item-label>
+    <!-- Drawer con efecto mini y responsive -->
+    <q-drawer
+      v-model="leftDrawerOpen"
+      :mini="miniState"
+      @mouseenter="miniState = false"
+      @mouseleave="miniState = true"
+      :width="200"
+      :breakpoint="500"
+      bordered
+      :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'"
+      show-if-above
+    >
+      <q-scroll-area class="fit" :horizontal-thumb-style="{ opacity: 0 }">
+        <q-list>
+          <q-item-label header>
+            Registro de Datos
+            <q-btn
+              flat
+              dense
+              round
+              icon="arrow_back"
+              class="float-right"
+              @click="toggleLeftDrawer"
+            />
+          </q-item-label>
 
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
+          <!-- Aquí se mantiene la funcionalidad de navegación -->
+          <router-link
+            v-for="link in linksList"
+            :key="link.title"
+            :to="link.link"
+          >
+            <q-item clickable v-ripple @click="toggleLeftDrawer">
+              <q-item-section avatar>
+                <!-- Icono con color rojo -->
+                <q-icon :name="link.icon" class="text-red-6" />
+              </q-item-section>
+              <q-item-section>{{ link.title }}</q-item-section>
+            </q-item>
+          </router-link>
+        </q-list>
+      </q-scroll-area>
     </q-drawer>
 
     <q-page-container>
@@ -64,18 +66,14 @@
 </template>
 
 <script setup>
-import { ref, defineOptions, computed } from "vue";
+import { ref, computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import EssentialLink from "src/components/MenuSidebar.vue";
 
-defineOptions({
-  name: "HomeAdmin",
-  computed: {
-    username() {
-      return this.$route.query.username || "Admin";
-    },
-  },
-});
+const username = computed(() => "Admin"); // Mock username for now
+const leftDrawerOpen = ref(false);
+const miniState = ref(true); // State to control mini-drawer effect
+const router = useRouter();
+const route = useRoute();
 
 const linksList = [
   {
@@ -110,10 +108,6 @@ const linksList = [
   },
 ];
 
-const leftDrawerOpen = ref(false);
-const router = useRouter();
-const route = useRoute();
-
 const isOnHomePage = computed(() => route.path === "/homeAdmin");
 
 function goToHome() {
@@ -126,13 +120,29 @@ function toggleLeftDrawer() {
 </script>
 
 <style scoped>
-.code-text {
-  font-size: 16px;
-  font-weight: 500;
-}
-
+/* Estilos adicionales */
 .q-toolbar-title {
   font-size: 20px;
   font-weight: 700;
+}
+
+.q-item {
+  transition: background-color 0.3s ease;
+}
+
+.q-item:hover {
+  background-color: #e0e0e0;
+}
+
+.q-drawer {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.q-btn {
+  transition: background-color 0.2s ease;
+}
+
+.q-btn:hover {
+  background-color: #f1f1f1;
 }
 </style>
