@@ -320,7 +320,7 @@ export default {
   border-radius: 12px; /* Bordes redondeados */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave para dar profundidad */
   width: 80%;
-  max-width: 800px;
+  max-width: 600px;
   margin: 0 auto; /* Centra el formulario horizontalmente */
   overflow-y: auto;
   display: flex;
@@ -350,7 +350,8 @@ export default {
   font-weight: bold;
   font-size: 16px;
   color: #555;
-  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
 }
 
 /* Estilo para los campos de entrada (select y input) */

@@ -250,7 +250,7 @@ export default {
       statusCliente,
       clienteSeleccionado,
       mostrarDialogoEliminar,
-      abrirDialogoEliminar
+      abrirDialogoEliminar,
     };
   },
 };
@@ -367,7 +367,8 @@ export default {
   font-weight: bold;
   font-size: 16px;
   color: #555;
-  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
 }
 
 /* Estilo para los campos de entrada (select y input) */
@@ -418,9 +419,9 @@ export default {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro con opacidad */
   display: flex;
-  justify-content: center;  /* Centra el contenido horizontalmente */
-  align-items: center;      /* Centra el contenido verticalmente */
-  z-index: 999;             /* Asegura que el formulario esté encima de otros elementos */
+  justify-content: center; /* Centra el contenido horizontalmente */
+  align-items: center; /* Centra el contenido verticalmente */
+  z-index: 999; /* Asegura que el formulario esté encima de otros elementos */
 }
 
 .activo-toggle {
@@ -431,5 +432,4 @@ export default {
 .activo-toggle .q-toggle__control {
   border: 2px solid #b91c1c; /* Cambiar el color del borde */
 }
-
 </style>

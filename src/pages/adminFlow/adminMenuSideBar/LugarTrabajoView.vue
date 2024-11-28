@@ -126,11 +126,10 @@ export default {
     };
 
     const abrirFormularioEdicion = (lugar) => {
-        lugarSeleccionado.value = lugar
-        Object.assign(lugarTemporal, { ...lugar });
-        esNuevoLugar.value = false;
-        mostrarFormulario.value = true;
-
+      lugarSeleccionado.value = lugar;
+      Object.assign(lugarTemporal, { ...lugar });
+      esNuevoLugar.value = false;
+      mostrarFormulario.value = true;
     };
 
     const guardarCambios = async () => {
@@ -165,9 +164,9 @@ export default {
         if (lugarSeleccionado.value) {
           const idLugar = lugarSeleccionado.value.idLugarTrabajo;
           if (lugarSeleccionado.value.estado) {
-            await deactivate(idLugar);  // Desactivar lugar
+            await deactivate(idLugar); // Desactivar lugar
           } else {
-            await activate(idLugar);  // Activar lugar
+            await activate(idLugar); // Activar lugar
           }
           await obtenerLugars(); // Cambiar de `false` a `null`
         }
@@ -203,204 +202,204 @@ export default {
       onToggleChange,
       deactivate,
       activate,
-      abrirDialogoEliminar
+      abrirDialogoEliminar,
     };
   },
 };
 </script>
 
 <style scoped>
-  /* Estilos generales de la tabla de lugares */
-  .lugars-table {
-    width: 80%;
-    margin-top: 40px;
-    border-collapse: collapse;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 8px;
-    overflow: hidden;
-    text-align: center;
-  }
+/* Estilos generales de la tabla de lugares */
+.lugars-table {
+  width: 80%;
+  margin-top: 40px;
+  border-collapse: collapse;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: center;
+}
 
-  /* Estilo para los encabezados de la tabla de lugares */
-  .lugars-table th {
-    background-color: #b91c1c; /* Rojo para el encabezado */
-    color: white;
-    font-size: 16px;
-    text-transform: uppercase;
-    padding: 12px;
-    text-align: center;
-  }
+/* Estilo para los encabezados de la tabla de lugares */
+.lugars-table th {
+  background-color: #b91c1c; /* Rojo para el encabezado */
+  color: white;
+  font-size: 16px;
+  text-transform: uppercase;
+  padding: 12px;
+  text-align: center;
+}
 
-  /* Estilo para las celdas de la tabla de lugares */
-  .lugars-table td {
-    background-color: #f9fafb;
-    color: #333;
-    font-size: 14px;
-    border-bottom: 1px solid #e2e8f0;
-    padding: 12px;
-    text-align: center;
-  }
+/* Estilo para las celdas de la tabla de lugares */
+.lugars-table td {
+  background-color: #f9fafb;
+  color: #333;
+  font-size: 14px;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 12px;
+  text-align: center;
+}
 
-  /* Estilo para las filas alternadas en la tabla de lugares */
-  .lugars-table tr:nth-child(even) td {
-    background-color: #e5e7eb;
-  }
+/* Estilo para las filas alternadas en la tabla de lugares */
+.lugars-table tr:nth-child(even) td {
+  background-color: #e5e7eb;
+}
 
-  /* Estilo para el hover de las filas en la tabla de lugares */
-  .lugars-table tr:hover td {
-    background-color: #fddede; /* Rojo claro para hover */
-  }
+/* Estilo para el hover de las filas en la tabla de lugares */
+.lugars-table tr:hover td {
+  background-color: #fddede; /* Rojo claro para hover */
+}
 
-  /* Estilo para el cuadro de lugar seleccionado */
-  .lugar-seleccionado {
-    margin-top: 50px;
-    font-size: 18px;
-    text-align: left;
-  }
+/* Estilo para el cuadro de lugar seleccionado */
+.lugar-seleccionado {
+  margin-top: 50px;
+  font-size: 18px;
+  text-align: left;
+}
 
-  /* Estilo para los botones de editar y eliminar */
-  .botones-editar-eliminar {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 30px;
-    font-size: 18px;
-    text-align: left;
-    align-items: center;
-  }
+/* Estilo para los botones de editar y eliminar */
+.botones-editar-eliminar {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+  font-size: 18px;
+  text-align: left;
+  align-items: center;
+}
 
-  /* Estilo para los botones de editar y eliminar */
-  .editar-button,
-  .eliminar-button {
-    padding: 12px 24px;
-    background-color: #1e3a8a; /* Azul para los botones */
-    color: white;
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
+/* Estilo para los botones de editar y eliminar */
+.editar-button,
+.eliminar-button {
+  padding: 12px 24px;
+  background-color: #1e3a8a; /* Azul para los botones */
+  color: white;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
-  .editar-button:hover,
-  .eliminar-button:hover {
-    background-color: #1d4ed8; /* Azul más oscuro para hover */
-  }
+.editar-button:hover,
+.eliminar-button:hover {
+  background-color: #1d4ed8; /* Azul más oscuro para hover */
+}
 
-  /* Estilo para el botón de crear lugar */
-  .crear-lugar-button {
-    margin-left: 10%;
-    margin-top: 20px;
-    padding: 12px 24px;
-    font-size: 16px;
-    background-color: #e53e3e; /* Rojo para el botón de crear lugar */
-    color: white;
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
+/* Estilo para el botón de crear lugar */
+.crear-lugar-button {
+  margin-left: 10%;
+  margin-top: 20px;
+  padding: 12px 24px;
+  font-size: 16px;
+  background-color: #e53e3e; /* Rojo para el botón de crear lugar */
+  color: white;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
-  .crear-lugar-button:hover {
-    background-color: #c53a3a; /* Rojo más oscuro para hover */
-  }
+.crear-lugar-button:hover {
+  background-color: #c53a3a; /* Rojo más oscuro para hover */
+}
 
-  /* Modal de Crear/Editar Lugar */
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro con opacidad */
-    display: flex;
-    justify-content: center;  /* Centra el contenido horizontalmente */
-    align-items: center;      /* Centra el contenido verticalmente */
-    z-index: 1000;             /* Asegura que el modal esté encima de otros elementos */
-  }
+/* Modal de Crear/Editar Lugar */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro con opacidad */
+  display: flex;
+  justify-content: center; /* Centra el contenido horizontalmente */
+  align-items: center; /* Centra el contenido verticalmente */
+  z-index: 1000; /* Asegura que el modal esté encima de otros elementos */
+}
 
-  .modal-content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 12px; /* Bordes redondeados */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave para dar profundidad */
-    width: 80%;
-    max-width: 800px;
-    margin: 0 auto; /* Centra el formulario horizontalmente */
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column; /* Hace que el contenido del formulario esté en columna */
-    align-items: center;
-  }
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px; /* Bordes redondeados */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave para dar profundidad */
+  width: 80%;
+  max-width: 800px;
+  margin: 0 auto; /* Centra el formulario horizontalmente */
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column; /* Hace que el contenido del formulario esté en columna */
+  align-items: center;
+}
 
-  .modal-content h2 {
-    margin-bottom: 20px;
-    font-size: 24px;
-    color: #333;
-    font-weight: 600;
-    text-align: center; /* Centra el título */
-  }
+.modal-content h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+  font-weight: 600;
+  text-align: center; /* Centra el título */
+}
 
-  /* Usamos Grid para dividir el formulario en 2 filas y 4 columnas */
+/* Usamos Grid para dividir el formulario en 2 filas y 4 columnas */
+.modal-content form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 4 columnas con igual tamaño */
+  gap: 20px;
+  width: 100%; /* Asegura que el formulario ocupe todo el ancho */
+}
+
+/* Estilo para las etiquetas */
+.modal-content label {
+  display: block;
+  font-weight: bold;
+  font-size: 16px;
+  color: #555;
+  display: flex;
+  align-items: center;
+}
+
+/* Estilo para los campos de entrada (select y input) */
+.modal-content select,
+.modal-content input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Estilo para los botones dentro del formulario */
+.modal-content button {
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  background-color: #e53e3e; /* Rojo para el botón */
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+/* Estilo para el toggle de estado activo */
+.activo-toggle {
+  margin-right: 8%;
+  color: #af1712; /* Cambiar el color del texto o la etiqueta */
+}
+
+.activo-toggle .q-toggle__control {
+  border: 2px solid #b91c1c; /* Cambiar el color del borde */
+}
+
+/* Para que los campos se ajusten bien en pantallas pequeñas */
+@media (max-width: 768px) {
   .modal-content form {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 4 columnas con igual tamaño */
-    gap: 20px;
-    width: 100%; /* Asegura que el formulario ocupe todo el ancho */
+    grid-template-columns: 1fr 1fr; /* En pantallas pequeñas, dos columnas */
   }
+}
 
-  /* Estilo para las etiquetas */
-  .modal-content label {
-    display: block;
-    font-weight: bold;
-    font-size: 16px;
-    color: #555;
-    margin-bottom: 8px;
-  }
-
-  /* Estilo para los campos de entrada (select y input) */
-  .modal-content select,
-  .modal-content input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    color: #333;
-  }
-
-  /* Estilo para los botones dentro del formulario */
-  .modal-content button {
-    padding: 12px 24px;
-    font-size: 16px;
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
-    background-color: #e53e3e; /* Rojo para el botón */
-    color: white;
-    transition: background-color 0.3s ease;
-  }
-
-  /* Estilo para el toggle de estado activo */
-  .activo-toggle {
-    margin-right: 8%;
-    color: #af1712; /* Cambiar el color del texto o la etiqueta */
-  }
-
-  .activo-toggle .q-toggle__control {
-    border: 2px solid #b91c1c; /* Cambiar el color del borde */
-  }
-
-  /* Para que los campos se ajusten bien en pantallas pequeñas */
-  @media (max-width: 768px) {
-    .modal-content form {
-      grid-template-columns: 1fr 1fr; /* En pantallas pequeñas, dos columnas */
-    }
-  }
-
-  /* Para evitar el scroll cuando el modal esté abierto */
-  body.modal-open {
-    overflow: hidden;
-  }
-
+/* Para evitar el scroll cuando el modal esté abierto */
+body.modal-open {
+  overflow: hidden;
+}
 </style>
