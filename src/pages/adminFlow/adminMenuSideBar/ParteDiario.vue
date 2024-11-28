@@ -25,13 +25,14 @@
           <th>Personal</th>
           <th>Maquinaria</th>
           <th>Lugar</th>
-          <th>Horometro Inicio</th>
-          <th>Horometro Final</th>
+          <th>Horom. Inicio</th>
+          <th>Horom. Final</th>
           <th>Cant. Petroleo</th>
           <th>Cant. Aceite</th>
           <th>Fecha</th>
           <th>Estado</th>
           <th>Editar</th>
+          <th>Detalle</th>
         </tr>
       </thead>
       <tbody>
@@ -66,6 +67,14 @@
               flat
             />
           </td>
+          <td>
+            <q-btn
+              @click="abrirSecciónDetalle(parteDiario)"
+              color="secondary"
+              icon="description"
+              flat
+            />
+          </td>
         </tr>
       </tbody>
     </table>
@@ -73,7 +82,9 @@
     <div v-if="mostrarFormulario" class="modal-overlay">
       <div class="modal-content">
         <h2>
-          {{ esNuevoParteDiario ? "Crear Parte Diario" : "Editar ParteDiario" }}
+          {{
+            esNuevoParteDiario ? "Crear Parte Diario" : "Editar Parte Diario"
+          }}
         </h2>
         <form @submit.prevent="guardarCambios">
           <label for="opcionesCl">Seleccione un Cliente:</label>
@@ -165,14 +176,118 @@
     <q-card>
       <q-card-section class="q-pt-none">
         <div class="text-h6">
-          ¿Estás seguro de {{ mostrarActivos ? "desactivar" : "activar" }} esta
-          parteDiario?
+          ¿Estás seguro de {{ mostrarActivos ? "desactivar" : "activar" }} este
+          Parte Diario?
         </div>
       </q-card-section>
 
       <q-card-actions>
         <q-btn flat label="No" @click="cancelarEdicion" color="secondary" />
         <q-btn flat label="Sí" @click="eliminarParteDiario" color="negative" />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
+
+  <div style="position: relative">
+    <q-btn
+      v-if="mostrarDetalle"
+      icon="add_circle_outline"
+      color="secondary"
+      flat
+      size="sm"
+      @click="mostrarFormularioDetalle = true"
+      class="add-btn"
+    />
+    <q-btn
+      v-if="mostrarDetalle"
+      icon="close"
+      color="negative"
+      flat
+      size="sm"
+      @click="mostrarDetalle = false"
+      class="close-btn"
+    />
+    <table
+      v-if="parteDiarios.length > 0 && mostrarDetalle"
+      class="detalleParteDiarios-table"
+    >
+      <thead>
+        <tr>
+          <th>Parte Diario</th>
+          <th>Hora Inicio</th>
+          <th>Hora Fin</th>
+          <th>Trabajo Efectuado</th>
+          <th>Eliminar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="detalleParteDiario in detalleParteDiarios"
+          :key="detalleParteDiario.idDetalleParteDiario"
+        >
+          <td>{{ detalleParteDiario.idParteDiario }}</td>
+          <td>{{ detalleParteDiario.horaInicio }}</td>
+          <td>{{ detalleParteDiario.horaFin }}</td>
+          <td>{{ detalleParteDiario.trabajoEfectuado }}</td>
+          <td>
+            <q-btn
+              @click="abrirDialogoEliminarDetalle(detalleParteDiario)"
+              label="Eliminar"
+              color="negative"
+              icon="delete"
+              flat
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div v-if="mostrarFormularioDetalle" class="modal-overlay">
+    <div class="modal-content">
+      <h2>Crear Detalle Parte Diario</h2>
+      <form @submit.prevent="guardarCambiosDetalle">
+        <label for="horaInicio">Hora Inicio:</label>
+        <input
+          id="horaInicio"
+          v-model="horaInicioDetail"
+          type="time"
+          min="08:00"
+          max="18:00"
+        />
+        <input
+          id="horaFinal"
+          v-model="horaFinalDetail"
+          type="time"
+          min="08:00"
+          max="18:00"
+        />
+
+        <label for="trabajo">Trabajo Efectuado:</label>
+        <input id="trabajo" v-model="trabajoEfectuadoDetail" type="text" />
+
+        <button type="submit">Guardar</button>
+        <button type="button" @click="cancelarEdicion">Cancelar</button>
+      </form>
+    </div>
+  </div>
+
+  <q-dialog v-model="mostrarDialogoEliminarDetalle">
+    <q-card>
+      <q-card-section class="q-pt-none">
+        <div class="text-h6">
+          ¿Estás seguro de eliminar este Detalle de Parte Diario?
+        </div>
+      </q-card-section>
+
+      <q-card-actions>
+        <q-btn flat label="No" @click="cancelarEdicion" color="secondary" />
+        <q-btn
+          flat
+          label="Sí"
+          @click="eliminarDetalleParteDiario"
+          color="negative"
+        />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -193,22 +308,35 @@ import { getAllPersonalsActive } from "../../../services/RegistroDataRepository/
 import { getAllMaquinariasActive } from "../../../services/RegistroDataRepository/maquinariaService";
 import { getAllClientesActive } from "../../../services/RegistroDataRepository/clienteService";
 import { getAllLugarsActive } from "../../../services/RegistroDataRepository/lugarTrabajoService";
+import {
+  getAllDetalleParteDiariosActive,
+  deactivateDetail,
+  createDetalleParteDiario,
+} from "../../../services/RegistroDataRepository/detalleParteDiarioService";
 
 export default {
   name: "ParteDiarioInfo",
 
   setup() {
     const parteDiarios = ref([]);
+    const detalleParteDiarios = ref([]);
     const parteDiarioTemporal = reactive({});
     const mostrarFormulario = ref(false);
     const esNuevoParteDiario = ref(false);
     const mostrarDialogoEliminar = ref(false); // Variable para controlar el pop-up
+    const mostrarDialogoEliminarDetalle = ref(false);
     const mostrarActivos = ref(true);
+    const mostrarDetalle = ref(false);
     const clientes = ref([]);
     const maquinarias = ref([]);
     const personales = ref([]);
     const lugaresTrabajo = ref([]);
     const parteDiarioSeleccionado = ref(null);
+    const detalleParteDiarioSeleccionado = ref(null);
+    const mostrarFormularioDetalle = ref(false);
+    const horaInicioDetail = ref();
+    const horaFinalDetail = ref();
+    const trabajoEfectuadoDetail = ref();
 
     const obtenerClientes = async () => {
       try {
@@ -257,6 +385,19 @@ export default {
       }
     };
 
+    const obtenerDetalleParteDiario = async (idParteDiario) => {
+      try {
+        detalleParteDiarios.value = await getAllDetalleParteDiariosActive(
+          idParteDiario
+        );
+      } catch (error) {
+        console.error(
+          "Error al obtener la información de los detalle parte diario:",
+          error
+        );
+      }
+    };
+
     const abrirFormularioCreacion = () => {
       parteDiarioSeleccionado.value = null;
       Object.assign(parteDiarioTemporal, {
@@ -292,6 +433,17 @@ export default {
       mostrarDialogoEliminar.value = true; // Muestra el diálogo
     };
 
+    const abrirDialogoEliminarDetalle = (detalleParteDiario) => {
+      detalleParteDiarioSeleccionado.value = detalleParteDiario; // Asigna el cliente seleccionado
+      mostrarDialogoEliminarDetalle.value = true; // Muestra el diálogo
+    };
+
+    const abrirSecciónDetalle = (parteDiario) => {
+      Object.assign(parteDiarioTemporal, { ...parteDiario });
+      mostrarDetalle.value = true;
+      obtenerDetalleParteDiario(parteDiarioTemporal.idParteDiario);
+    };
+
     const guardarCambios = async () => {
       try {
         if (esNuevoParteDiario.value) {
@@ -308,9 +460,35 @@ export default {
       }
     };
 
+    const guardarCambiosDetalle = async () => {
+      try {
+        const newDetalleParteDiario = {
+          idParteDiario: parteDiarioTemporal.idParteDiario,
+          horaInicio: `${horaInicioDetail.value}:00`,
+          horaFin: `${horaFinalDetail.value}:00`,
+          trabajoEfectuado: trabajoEfectuadoDetail.value,
+          estado: true,
+        };
+
+        console.log(newDetalleParteDiario);
+        await createDetalleParteDiario(newDetalleParteDiario);
+
+        await obtenerDetalleParteDiario(parteDiarioTemporal.idParteDiario);
+      } catch (error) {
+        console.error("Error al guardar los cambios:", error);
+      } finally {
+        mostrarFormularioDetalle.value = false;
+        horaInicioDetail.value = null;
+        horaFinalDetail.value = null;
+        trabajoEfectuadoDetail.value = null;
+      }
+    };
+
     const cancelarEdicion = () => {
       mostrarFormulario.value = false;
+      mostrarFormularioDetalle.value = false;
       mostrarDialogoEliminar.value = false;
+      mostrarDialogoEliminarDetalle.value = false;
     };
 
     const eliminarParteDiario = async () => {
@@ -325,6 +503,22 @@ export default {
         console.error("Error al eliminar el parteDiario:", error);
       } finally {
         mostrarDialogoEliminar.value = false;
+      }
+    };
+
+    const eliminarDetalleParteDiario = async () => {
+      try {
+        await deactivateDetail(
+          detalleParteDiarioSeleccionado.value.idDetalleParteDiario
+        );
+
+        await obtenerDetalleParteDiario(
+          detalleParteDiarioSeleccionado.value.idParteDiario
+        );
+      } catch (error) {
+        console.error("Error al eliminar el detalleParteDiario:", error);
+      } finally {
+        mostrarDialogoEliminarDetalle.value = false;
       }
     };
 
@@ -366,6 +560,19 @@ export default {
       maquinarias,
       personales,
       lugaresTrabajo,
+      mostrarDialogoEliminarDetalle,
+      detalleParteDiarioSeleccionado,
+      detalleParteDiarios,
+      abrirDialogoEliminarDetalle,
+      abrirSecciónDetalle,
+      mostrarDetalle,
+      obtenerDetalleParteDiario,
+      eliminarDetalleParteDiario,
+      mostrarFormularioDetalle,
+      horaInicioDetail,
+      horaFinalDetail,
+      trabajoEfectuadoDetail,
+      guardarCambiosDetalle,
     };
   },
 };
@@ -487,7 +694,7 @@ export default {
   border-radius: 12px; /* Bordes redondeados */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave para dar profundidad */
   width: 80%;
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto; /* Centra el formulario horizontalmente */
   overflow-y: auto;
   display: flex;
@@ -517,7 +724,8 @@ export default {
   font-weight: bold;
   font-size: 16px;
   color: #555;
-  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
 }
 
 /* Estilo para los campos de entrada (select y input) */
@@ -563,5 +771,74 @@ export default {
 /* Para evitar el scroll cuando el modal esté abierto */
 body.modal-open {
   overflow: hidden;
+}
+
+.detalleParteDiarios-table {
+  width: 50%;
+  margin-top: 40px;
+  border-collapse: collapse;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: center;
+  margin-bottom: 100px;
+}
+
+/* Estilo para los encabezados de la tabla de parteDiarioes */
+.detalleParteDiarios-table th {
+  background-color: #b91c1c; /* Rojo para el encabezado */
+  color: white;
+  font-size: 16px;
+  text-transform: uppercase;
+  padding: 12px;
+  text-align: center;
+}
+
+/* Estilo para las celdas de la tabla de parteDiarioes */
+.detalleParteDiarios-table td {
+  background-color: #f9fafb;
+  color: #333;
+  font-size: 14px;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 12px;
+  text-align: center;
+}
+
+/* Estilo para las filas alternadas en la tabla de parteDiarioes */
+.detalleParteDiarios-table tr:nth-child(even) td {
+  background-color: #e5e7eb;
+}
+
+/* Estilo para el hover de las filas en la tabla de parteDiarioes */
+.detalleParteDiarios-table tr:hover td {
+  background-color: #fddede; /* Rojo claro para hover */
+}
+
+.close-btn {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  width: 32px;
+  height: 32px;
+  background-color: rgb(214, 172, 172);
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-right: 25%;
+  padding-bottom: 5px;
+}
+
+.add-btn {
+  position: absolute;
+  top: -12px;
+  left: -12px;
+  width: 32px;
+  height: 32px;
+  background-color: rgb(160, 214, 150);
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-left: 25%;
+  padding-bottom: 5px;
 }
 </style>

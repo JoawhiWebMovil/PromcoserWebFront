@@ -204,11 +204,9 @@ export default {
     };
 
     const abrirFormularioEdicion = (maquinaria) => {
-
-        Object.assign(maquinariaTemporal, { ...maquinaria});
-        esNuevoMaquinaria.value = false;
-        mostrarFormulario.value = true;
-
+      Object.assign(maquinariaTemporal, { ...maquinaria });
+      esNuevoMaquinaria.value = false;
+      mostrarFormulario.value = true;
     };
 
     const abrirDialogoEliminar = (maquinaria) => {
@@ -241,12 +239,12 @@ export default {
 
     const eliminarMaquinaria = async () => {
       try {
-          if (mostrarActivos.value) {
-            await deactivate(maquinariaSeleccionado.value.idMaquinaria);
-          } else {
-            await activate(maquinariaSeleccionado.value.idMaquinaria);
-          }
-          await obtenerMaquinarias();
+        if (mostrarActivos.value) {
+          await deactivate(maquinariaSeleccionado.value.idMaquinaria);
+        } else {
+          await activate(maquinariaSeleccionado.value.idMaquinaria);
+        }
+        await obtenerMaquinarias();
       } catch (error) {
         console.error("Error al eliminar el maquinaria:", error);
       } finally {
@@ -364,7 +362,7 @@ export default {
   border-radius: 12px; /* Bordes redondeados */
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); /* Sombra suave para dar profundidad */
   width: 80%;
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto; /* Centra el formulario horizontalmente */
   overflow-y: auto;
   display: flex;
@@ -394,7 +392,8 @@ export default {
   font-weight: bold;
   font-size: 16px;
   color: #555;
-  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
 }
 
 /* Estilo para los campos de entrada (select y input) */
@@ -434,11 +433,10 @@ export default {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro con opacidad */
   display: flex;
-  justify-content: center;  /* Centra el contenido horizontalmente */
-  align-items: center;      /* Centra el contenido verticalmente */
-  z-index: 999;             /* Asegura que el formulario esté encima de otros elementos */
+  justify-content: center; /* Centra el contenido horizontalmente */
+  align-items: center; /* Centra el contenido verticalmente */
+  z-index: 999; /* Asegura que el formulario esté encima de otros elementos */
 }
-
 
 .activo-toggle {
   margin-right: 8%;
