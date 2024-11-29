@@ -4,7 +4,11 @@ Projecto web Promcoser
 
 # DataBase SCRIPT
 
-https://drive.google.com/file/d/1RFoYcLlXxDpPlEjW3-_3T_KI8qFWOou7/view?usp=drive_link
+https://drive.google.com/file/d/1xr7n_lFFvi65W05CRQ4XOsnkMjSuuYcR/view?usp=sharing
+
+# Manual de Uso
+
+https://drive.google.com/drive/folders/1vWH9ANTyFg4XAzjpevZ9cMe06s3Lvr8N?usp=sharing
 
 ## Install the dependencies
 
