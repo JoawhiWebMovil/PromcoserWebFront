@@ -132,6 +132,12 @@ export default {
     };
 
     const guardarCambios = async () => {
+      if (!rolTemporal.descripcionRol) {
+        alert(
+          "Todos los campos son obligatorios. Por favor, complete todos los campos."
+        );
+        return;
+      }
       try {
         if (esNuevoRol.value) {
           const { idRol, ...entidadSinId } = rolTemporal; // Quitar campo ID

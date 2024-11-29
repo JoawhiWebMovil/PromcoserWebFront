@@ -248,20 +248,8 @@
       <h2>Crear Detalle Parte Diario</h2>
       <form @submit.prevent="guardarCambiosDetalle">
         <label for="horaInicio">Hora Inicio:</label>
-        <input
-          id="horaInicio"
-          v-model="horaInicioDetail"
-          type="time"
-          min="08:00"
-          max="18:00"
-        />
-        <input
-          id="horaFinal"
-          v-model="horaFinalDetail"
-          type="time"
-          min="08:00"
-          max="18:00"
-        />
+        <input id="horaInicio" v-model="horaInicioDetail" type="time" />
+        <input id="horaFinal" v-model="horaFinalDetail" type="time" />
 
         <label for="trabajo">Trabajo Efectuado:</label>
         <input id="trabajo" v-model="trabajoEfectuadoDetail" type="text" />
@@ -445,6 +433,22 @@ export default {
     };
 
     const guardarCambios = async () => {
+      if (
+        !parteDiarioTemporal.horometroFinal ||
+        !parteDiarioTemporal.horometroInicio ||
+        !parteDiarioTemporal.idCliente ||
+        !parteDiarioTemporal.idLugarTrabajo ||
+        !parteDiarioTemporal.idPersonal ||
+        !parteDiarioTemporal.idMaquinaria ||
+        !parteDiarioTemporal.cantidadPetroleo ||
+        !parteDiarioTemporal.cantidadAceite ||
+        !parteDiarioTemporal.fecha
+      ) {
+        alert(
+          "Todos los campos son obligatorios. Por favor, complete todos los campos."
+        );
+        return;
+      }
       try {
         if (esNuevoParteDiario.value) {
           const { idParteDiario, ...entidadSinId } = parteDiarioTemporal; // Quitar campo ID
@@ -461,6 +465,22 @@ export default {
     };
 
     const guardarCambiosDetalle = async () => {
+      if (horaInicioDetail.value >= horaFinalDetail.value) {
+        alert("Por favor, revisar el orden de las horas.");
+        return;
+      }
+
+      if (
+        !horaInicioDetail.value ||
+        !horaFinalDetail.value ||
+        !trabajoEfectuadoDetail.value
+      ) {
+        alert(
+          "Todos los campos son obligatorios. Por favor, complete todos los campos."
+        );
+        return;
+      }
+
       try {
         const newDetalleParteDiario = {
           idParteDiario: parteDiarioTemporal.idParteDiario,
