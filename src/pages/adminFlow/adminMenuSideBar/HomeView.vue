@@ -3,12 +3,13 @@
   <div v-if="isOnHomePage" class="hero-image">
     <img src="src/assets/logoPromcoser.png" alt="Imagen de empresa" />
   </div>
-  <!-- Carrusel de imágenes -->
+   <!-- Carrusel de imágenes -->
   <div v-if="isOnHomePage" class="carousel-container">
     <div class="carousel">
+      <img src="src/assets/maquinaria.jpg" alt="Imagen 1" />
       <img src="src/assets/maquinaria1.jpg" alt="Imagen 1" />
       <img src="src/assets/maquinaria2.jpg" alt="Imagen 2" />
-      <img src="src/assets/maquinaria3.jpg" alt="Imagen 3" />
+      <img src="src/assets/maquinaria4.jpg" alt="Imagen 3" />
       <!-- Agrega más imágenes según sea necesario -->
     </div>
 
@@ -30,18 +31,17 @@
         :style="{
           maxWidth: '300px',
           margin: '20px auto',
-          backgroundColor: '#e3f2fd',
-          border: '5px solid #b97c7c',
-          borderRadius: '15px',
+          backgroundColor: '#412f95',
+          border: '2px solid #412f95',
         }"
       >
         <q-card-section>
-          <div class="text-h6" style="text-align: center; font-weight: bold">
+          <div class="text-h6" style="text-align: center; font-weight: bold; color: #ffffff;">
             Clientes Activos
           </div>
           <div
             class="q-mt-md"
-            style="text-align: center; font-size: 24px; font-weight: 600"
+            style="text-align: center; font-size: 24px; font-weight: 600; color: #ffffff;"
           >
             {{ clientCount }}
           </div>
@@ -54,18 +54,17 @@
         :style="{
           maxWidth: '300px',
           margin: '20px auto',
-          backgroundColor: '#e3f2fd',
-          border: '5px solid #b97c7c',
-          borderRadius: '15px',
+          backgroundColor: '#7875f4',
+          border: '2px solid #7875f4',
         }"
       >
         <q-card-section>
-          <div class="text-h6" style="text-align: center; font-weight: bold">
+          <div class="text-h6" style="text-align: center; font-weight: bold; color: #ffffff;">
             Clientes Inactivos
           </div>
           <div
             class="q-mt-md"
-            style="text-align: center; font-size: 24px; font-weight: 600"
+            style="text-align: center; font-size: 24px; font-weight: 600; color: #ffffff;"
           >
             {{ inactiveClientCount }}
           </div>
@@ -78,18 +77,17 @@
         :style="{
           maxWidth: '300px',
           margin: '20px auto',
-          backgroundColor: '#e3f2fd',
-          border: '5px solid #b97c7c',
-          borderRadius: '15px',
+          backgroundColor: '#ffb601',
+          border: '2px solid #ffb601',
         }"
       >
         <q-card-section>
-          <div class="text-h6" style="text-align: center; font-weight: bold">
+          <div class="text-h6" style="text-align: center; font-weight: bold; color: #ffffff;">
             Maquinaria Activa
           </div>
           <div
             class="q-mt-md"
-            style="text-align: center; font-size: 24px; font-weight: 600"
+            style="text-align: center; font-size: 24px; font-weight: 600; color: #ffffff;"
           >
             {{ machineryActiveCount }}
           </div>
@@ -102,18 +100,17 @@
         :style="{
           maxWidth: '300px',
           margin: '20px auto',
-          backgroundColor: '#e3f2fd',
-          border: '5px solid #b97c7c',
-          borderRadius: '15px',
+          backgroundColor: '#ff7f05',
+          border: '2px solid #ff7f05',
         }"
       >
         <q-card-section>
-          <div class="text-h6" style="text-align: center; font-weight: bold">
+          <div class="text-h6" style="text-align: center; font-weight: bold; color: #ffffff;">
             Maquinaria Inactiva
           </div>
           <div
             class="q-mt-md"
-            style="text-align: center; font-size: 24px; font-weight: 600"
+            style="text-align: center; font-size: 24px; font-weight: 600; color: #ffffff;"
           >
             {{ machineryInactiveCount }}
           </div>
@@ -126,18 +123,17 @@
         :style="{
           maxWidth: '300px',
           margin: '20px auto',
-          backgroundColor: '#e3f2fd',
-          border: '5px solid #b97c7c',
-          borderRadius: '15px',
+          backgroundColor: '#ff2600',
+          border: '2px solid #ff2600',
         }"
       >
         <q-card-section>
-          <div class="text-h6" style="text-align: center; font-weight: bold">
+          <div class="text-h6" style="text-align: center; font-weight: bold; color: #ffffff;">
             Personal Activo
           </div>
           <div
             class="q-mt-md"
-            style="text-align: center; font-size: 24px; font-weight: 600"
+            style="text-align: center; font-size: 24px; font-weight: 600; color: #ffffff;"
           >
             {{ personnelActiveCount }}
           </div>
@@ -150,18 +146,17 @@
         :style="{
           maxWidth: '300px',
           margin: '20px auto',
-          backgroundColor: '#e3f2fd',
-          border: '5px solid #b97c7c',
-          borderRadius: '15px',
+          backgroundColor: '#9b0b0b',
+          border: '2px solid #9b0b0b',
         }"
       >
         <q-card-section>
-          <div class="text-h6" style="text-align: center; font-weight: bold">
+          <div class="text-h6" style="text-align: center; font-weight: bold; color: #ffffff;">
             Personal Inactivo
           </div>
           <div
             class="q-mt-md"
-            style="text-align: center; font-size: 24px; font-weight: 600"
+            style="text-align: center; font-size: 24px; font-weight: 600; color: #ffffff;"
           >
             {{ personnelInactiveCount }}
           </div>
@@ -182,11 +177,12 @@
             :style="{
               maxWidth: '300px',
               margin: '20px auto',
-              backgroundColor: '#e3f2fd',
-              border: '5px solid #b97c7c',
-              borderRadius: '15px',
+              backgroundColor: '#3d8351',
+              border: '2px solid #3d8351',
+              borderRadius: '50%', /* Esto hace que sea redondo */
             }"
           >
+          <q-card class="q-mb-md card-redonda">
             <q-card-section>
               <div
                 class="text-h6"
@@ -200,17 +196,18 @@
               </div>
             </q-card-section>
           </q-card>
-
+        </q-card>
           <q-card
             class="q-mb-md"
             :style="{
               maxWidth: '300px',
               margin: '20px auto',
-              backgroundColor: '#e3f2fd',
-              border: '5px solid #b97c7c',
-              borderRadius: '15px',
+              backgroundColor: '#b1c765',
+              border: '2px solid #b1c765',
+              borderRadius: '50%',
             }"
           >
+          <q-card class="q-mb-md card-redonda">
             <q-card-section>
               <div
                 class="text-h6"
@@ -224,17 +221,18 @@
               </div>
             </q-card-section>
           </q-card>
-
+        </q-card>
           <q-card
             class="q-mb-md"
             :style="{
               maxWidth: '300px',
               margin: '20px auto',
-              backgroundColor: '#e3f2fd',
-              border: '5px solid #b97c7c',
-              borderRadius: '15px',
+              backgroundColor: '#f06433',
+              border: '2px solid #f06433',
+              borderRadius: '50%',
             }"
           >
+          <q-card class="q-mb-md card-redonda">
             <q-card-section>
               <div
                 class="text-h6"
@@ -248,6 +246,7 @@
               </div>
             </q-card-section>
           </q-card>
+        </q-card>
         </q-col>
 
         <!-- Columna para los correos de los contactos de la empresa -->
@@ -257,11 +256,12 @@
             :style="{
               maxWidth: '300px',
               margin: '20px auto',
-              backgroundColor: '#e3f2fd',
-              border: '5px solid #b97c7c',
-              borderRadius: '15px',
+              backgroundColor: '#256035',
+              border: '2px solid #256035',
+              borderRadius: '50%',
             }"
           >
+          <q-card class="q-mb-md card-redonda">
             <q-card-section>
               <div
                 class="text-h6"
@@ -270,22 +270,24 @@
                 Trabajo en equipo
               </div>
               <div style="text-align: center; font-size: 16px">
-                Fomentamos la colaboración y el apoyo mutuo, donde cada miembro
-                aporta su talento y habilidades para lograr objetivos comunes.
+                Fomentamos la colaboración, aprovechando el talento de cada miembro
+                para alcanzar objetivos comunes.
               </div>
             </q-card-section>
           </q-card>
+        </q-card>
 
           <q-card
             class="q-mb-md"
             :style="{
               maxWidth: '300px',
               margin: '20px auto',
-              backgroundColor: '#e3f2fd',
-              border: '5px solid #b97c7c',
-              borderRadius: '15px',
+              backgroundColor: '#ffde59',
+              border: '2px solid #ffde59',
+              borderRadius: '50%',
             }"
           >
+          <q-card class="q-mb-md card-redonda">
             <q-card-section>
               <div
                 class="text-h6"
@@ -299,6 +301,7 @@
               </div>
             </q-card-section>
           </q-card>
+        </q-card>
         </q-col>
       </q-row>
     </div>
@@ -317,11 +320,12 @@
               maxWidth: '300px',
               margin: '20px auto',
               backgroundColor: '#e3f2fd',
-              border: '5px solid #b97c7c',
-              borderRadius: '15px',
+              border: '2px solid #12afa1',
             }"
           >
             <q-card-section>
+               <!-- Ícono centrado -->
+            <q-icon name="build" size="40px" color="primary" style="display: block; margin: 0 auto;" />
               <div
                 class="text-h6"
                 style="text-align: center; font-weight: bold"
@@ -340,11 +344,11 @@
               maxWidth: '300px',
               margin: '20px auto',
               backgroundColor: '#e3f2fd',
-              border: '5px solid #b97c7c',
-              borderRadius: '15px',
+              border: '2px solid #12afa1',
             }"
           >
             <q-card-section>
+              <q-icon name="business" size="40px" color="primary" style="display: block; margin: 0 auto;" />
               <div
                 class="text-h6"
                 style="text-align: center; font-weight: bold"
@@ -363,11 +367,11 @@
               maxWidth: '300px',
               margin: '20px auto',
               backgroundColor: '#e3f2fd',
-              border: '5px solid #b97c7c',
-              borderRadius: '15px',
+              border: '2px solid #12afa1',
             }"
           >
             <q-card-section>
+              <q-icon name="inventory" size="40px" color="primary" style="display: block; margin: 0 auto;" />
               <div
                 class="text-h6"
                 style="text-align: center; font-weight: bold"
@@ -387,11 +391,11 @@
               maxWidth: '300px',
               margin: '20px auto',
               backgroundColor: '#e3f2fd',
-              border: '5px solid #b97c7c',
-              borderRadius: '15px',
+              border: '2px solid #12afa1',
             }"
           >
             <q-card-section>
+              <q-icon name="contact_mail" size="40px" color="primary" style="display: block; margin: 0 auto;" />
               <div
                 class="text-h6"
                 style="text-align: center; font-weight: bold"
@@ -410,11 +414,11 @@
               maxWidth: '300px',
               margin: '20px auto',
               backgroundColor: '#e3f2fd',
-              border: '5px solid #b97c7c',
-              borderRadius: '15px',
+              border: '2px solid #12afa1',
             }"
           >
             <q-card-section>
+              <q-icon name="support_agent" size="40px" color="primary" style="display: block; margin: 0 auto;" />
               <div
                 class="text-h6"
                 style="text-align: center; font-weight: bold"
@@ -511,7 +515,7 @@ const isOnHomePageVisible = ref(true); // Controla la visibilidad del carrusel
 
 // Método para mover el carrusel
 function moveSlide(step) {
-  const slides = document.querySelectorAll(".carousel img");
+  const slides = document.querySelectorAll('.carousel img');
   const totalSlides = slides.length;
 
   currentIndex.value += step;
@@ -522,7 +526,7 @@ function moveSlide(step) {
     currentIndex.value = 0; // Si llega al último slide, volver al primero
   }
 
-  const carousel = document.querySelector(".carousel");
+  const carousel = document.querySelector('.carousel');
   const offset = -currentIndex.value * 100; // Mueve el carrusel al siguiente slide
 
   carousel.style.transform = `translateX(${offset}%)`;
@@ -622,5 +626,12 @@ function moveSlide(step) {
 
 .carousel-controls button:hover {
   background-color: rgba(0, 0, 0, 0.8);
+}
+
+.card-redonda {
+  border-radius: 50%; /* Hace que el elemento sea circular */
+  width: 300px; /* Ajusta ancho y alto */
+  height: 140px; /* Para mantener la proporción y hacerlo perfectamente redondo */
+  overflow: hidden; /* Opcional, para que el contenido no sobresalga */
 }
 </style>
