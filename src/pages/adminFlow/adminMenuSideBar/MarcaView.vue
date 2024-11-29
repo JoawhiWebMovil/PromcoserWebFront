@@ -132,7 +132,7 @@ export default {
     };
 
     const guardarCambios = async () => {
-      if (!lugarTemporal.nombreMarca) {
+      if (!marcaTemporal.nombreMarca) {
         alert(
           "Todos los campos son obligatorios. Por favor, complete todos los campos."
         );
