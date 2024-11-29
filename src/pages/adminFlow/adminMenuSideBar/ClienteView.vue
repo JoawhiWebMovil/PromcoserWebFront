@@ -198,29 +198,28 @@ export default {
     };
 
     const guardarCambios = async () => {
+      // Validar que todos los campos estén completos
+      if (
+        !clienteTemporal.nombre ||
+        !clienteTemporal.apellido ||
+        !clienteTemporal.razonSocial ||
+        !clienteTemporal.ruc ||
+        !clienteTemporal.correoElectronico ||
+        !clienteTemporal.telefono ||
+        !clienteTemporal.direccion
+      ) {
+        alert(
+          "Todos los campos son obligatorios. Por favor, complete todos los campos."
+        );
+        return; // Detener la ejecución si algún campo está vacío
+      }
+
+      // Validar RUC antes de guardar
+      if (!validarRUC(clienteTemporal.ruc)) {
+        alert("El RUC ingresado no es válido. Debe tener 11 dígitos.");
+        return; // Detener la ejecución si el RUC no es válido
+      }
       try {
-        // Validar que todos los campos estén completos
-        if (
-          !clienteTemporal.nombre ||
-          !clienteTemporal.apellido ||
-          !clienteTemporal.razonSocial ||
-          !clienteTemporal.ruc ||
-          !clienteTemporal.correoElectronico ||
-          !clienteTemporal.telefono ||
-          !clienteTemporal.direccion
-        ) {
-          alert(
-            "Todos los campos son obligatorios. Por favor, complete todos los campos."
-          );
-          return; // Detener la ejecución si algún campo está vacío
-        }
-
-        // Validar RUC antes de guardar
-        if (!validarRUC(clienteTemporal.ruc)) {
-          alert("El RUC ingresado no es válido. Debe tener 11 dígitos.");
-          return; // Detener la ejecución si el RUC no es válido
-        }
-
         if (esNuevoCliente.value) {
           const { idCliente, ...entidadSinId } = clienteTemporal;
           console.log("Crear nuevo cliente", entidadSinId);
