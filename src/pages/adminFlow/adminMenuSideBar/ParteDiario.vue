@@ -449,6 +449,15 @@ export default {
         );
         return;
       }
+      if (
+        parteDiarioTemporal.cantidadPetroleo < 0 ||
+        parteDiarioTemporal.cantidadAceite < 0
+      ) {
+        alert(
+          "Las cantidades no pueden ser negativas. Por favor, complete correctamente."
+        );
+        return;
+      }
       try {
         if (esNuevoParteDiario.value) {
           const { idParteDiario, ...entidadSinId } = parteDiarioTemporal; // Quitar campo ID
