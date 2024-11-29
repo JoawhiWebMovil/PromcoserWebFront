@@ -1,8 +1,7 @@
 import { boot } from "quasar/wrappers";
 import axios from "axios";
 
-const baseUrl = "https://ff11-38-25-17-64.ngrok-free.app/";
-// const baseUrl = "https://9809-38-25-17-64.ngrok-free.app"; // Ingresar ruta base del TUNEL
+const baseUrl = "https://ac8d-38-25-122-10.ngrok-free.app/";
 
 const apiClient = axios.create({
   baseURL: baseUrl,

@@ -1,248 +1,523 @@
 <template>
-  <q-page class="bg-light-gray">
-    <!-- Verifica si 'data' tiene un valor antes de mostrar -->
-    <div v-if="data && data.resumenProyectos" class="content-wrapper">
-      <h2 class="title">Información General de la Empresa</h2>
+  <!-- Imagen grande al inicio, solo si estamos en la página de inicio -->
+  <div v-if="isOnHomePage" class="hero-image">
+    <img src="src/assets/logoPromcoser.png" alt="Imagen de empresa" />
+  </div>
+  <!-- Nueva imagen entre el título y las cards -->
+  <div v-if="isOnHomePage" class="middle-image">
+    <img src="src/assets/maquinaria.jpg" alt="Imagen adicional" />
+  </div>
 
-      <!-- Resumen de Proyectos -->
-      <div class="section">
-        <h3 class="section-title">Resumen de Proyectos</h3>
-        <q-card class="info-card">
-          <q-card-section>
-            <p>
-              Total Proyectos:
-              <span class="value">{{
-                data.resumenProyectos.totalProyectos
-              }}</span>
-            </p>
-            <p>
-              Proyectos Activos:
-              <span class="value">{{
-                data.resumenProyectos.proyectosActivos
-              }}</span>
-            </p>
-            <p>
-              Proyectos Completados:
-              <span class="value">{{
-                data.resumenProyectos.proyectosCompletados
-              }}</span>
-            </p>
-            <p>
-              Progreso General:
-              <span class="value">{{
-                data.resumenProyectos.progresoGeneral
-              }}</span>
-            </p>
-          </q-card-section>
-        </q-card>
-      </div>
+  <!-- Mostrar información estática en la página de inicio -->
 
-      <!-- Resumen Financiero -->
-      <div class="section">
-        <h3 class="section-title">Resumen Financiero</h3>
-        <q-card class="info-card">
-          <q-card-section>
-            <p>
-              Presupuesto Total:
-              <span class="value">{{
-                formatCurrency(data.resumenFinanciero.presupuestoTotal)
-              }}</span>
-            </p>
-            <p>
-              Gastos Actuales:
-              <span class="value">{{
-                formatCurrency(data.resumenFinanciero.gastosActuales)
-              }}</span>
-            </p>
-            <p>
-              Diferencia Presupuestal:
-              <span class="value">{{
-                formatCurrency(data.resumenFinanciero.diferenciaPresupuestal)
-              }}</span>
-            </p>
-          </q-card-section>
-        </q-card>
-      </div>
+  <div v-if="isOnHomePage" class="company-info">
+    <h2 class="centered-title">Información de la Empresa</h2>
 
-      <!-- Estado de la Maquinaria -->
-      <div class="section">
-        <h3 class="section-title">Estado de la Maquinaria</h3>
-        <q-card class="info-card">
-          <q-card-section>
-            <p>
-              Maquinarias Operativas:
-              <span class="value">{{
-                data.estadoMaquinaria.maquinariasOperativas
-              }}</span>
-            </p>
-            <p>
-              Maquinarias en Mantenimiento:
-              <span class="value">{{
-                data.estadoMaquinaria.maquinariasEnMantenimiento
-              }}</span>
-            </p>
-            <p>
-              Maquinarias Pendientes de Revisión:
-              <span class="value">{{
-                data.estadoMaquinaria.maquinariasPendientesDeRevision
-              }}</span>
-            </p>
-          </q-card-section>
-        </q-card>
-      </div>
+    <!-- Card de Clientes Activos -->
+    <div style="display: flex; justify-content: center; gap: 20px">
+      <q-card
+        class="q-mb-md"
+        :style="{
+          maxWidth: '300px',
+          margin: '20px auto',
+          backgroundColor: '#e3f2fd',
+          border: '2px solid #ff5252',
+        }"
+      >
+        <q-card-section>
+          <div class="text-h6" style="text-align: center; font-weight: bold">
+            Clientes Activos
+          </div>
+          <div
+            class="q-mt-md"
+            style="text-align: center; font-size: 24px; font-weight: 600"
+          >
+            {{ clientCount }}
+          </div>
+        </q-card-section>
+      </q-card>
 
-      <!-- Gestión de Personal -->
-      <div class="section">
-        <h3 class="section-title">Gestión de Personal</h3>
-        <q-card class="info-card">
-          <q-card-section>
-            <p>
-              Empleados Activos:
-              <span class="value">{{
-                data.gestionPersonal.empleadosActivos
-              }}</span>
-            </p>
-            <div v-if="data.gestionPersonal.rolesCriticos.length">
-              <h4 class="subsection-title">Roles Críticos:</h4>
-              <ul>
-                <li
-                  v-for="(rol, index) in data.gestionPersonal.rolesCriticos"
-                  :key="index"
-                >
-                  {{ rol.rol }} - Vacantes:
-                  <span class="value">{{ rol.vacantes }}</span>
-                </li>
-              </ul>
-            </div>
-          </q-card-section>
-        </q-card>
-      </div>
+      <!-- Card de Clientes Inactivos -->
+      <q-card
+        class="q-mb-md"
+        :style="{
+          maxWidth: '300px',
+          margin: '20px auto',
+          backgroundColor: '#e3f2fd',
+          border: '2px solid #ff5252',
+        }"
+      >
+        <q-card-section>
+          <div class="text-h6" style="text-align: center; font-weight: bold">
+            Clientes Inactivos
+          </div>
+          <div
+            class="q-mt-md"
+            style="text-align: center; font-size: 24px; font-weight: 600"
+          >
+            {{ inactiveClientCount }}
+          </div>
+        </q-card-section>
+      </q-card>
 
-      <!-- Alertas y Notificaciones -->
-      <div class="section">
-        <h3 class="section-title">Alertas y Notificaciones</h3>
-        <q-card class="info-card">
-          <q-card-section>
-            <ul>
-              <li
-                v-for="(alerta, index) in data.alertasYNotificaciones"
-                :key="index"
+      <!-- Card de Maquinaria Activa -->
+      <q-card
+        class="q-mb-md"
+        :style="{
+          maxWidth: '300px',
+          margin: '20px auto',
+          backgroundColor: '#e3f2fd',
+          border: '2px solid #ff5252',
+        }"
+      >
+        <q-card-section>
+          <div class="text-h6" style="text-align: center; font-weight: bold">
+            Maquinaria Activa
+          </div>
+          <div
+            class="q-mt-md"
+            style="text-align: center; font-size: 24px; font-weight: 600"
+          >
+            {{ machineryActiveCount }}
+          </div>
+        </q-card-section>
+      </q-card>
+
+      <!-- Card de Maquinaria Inactiva -->
+      <q-card
+        class="q-mb-md"
+        :style="{
+          maxWidth: '300px',
+          margin: '20px auto',
+          backgroundColor: '#e3f2fd',
+          border: '2px solid #ff5252',
+        }"
+      >
+        <q-card-section>
+          <div class="text-h6" style="text-align: center; font-weight: bold">
+            Maquinaria Inactiva
+          </div>
+          <div
+            class="q-mt-md"
+            style="text-align: center; font-size: 24px; font-weight: 600"
+          >
+            {{ machineryInactiveCount }}
+          </div>
+        </q-card-section>
+      </q-card>
+
+      <!-- Card de Personal Activo -->
+      <q-card
+        class="q-mb-md"
+        :style="{
+          maxWidth: '300px',
+          margin: '20px auto',
+          backgroundColor: '#e3f2fd',
+          border: '2px solid #ff5252',
+        }"
+      >
+        <q-card-section>
+          <div class="text-h6" style="text-align: center; font-weight: bold">
+            Personal Activo
+          </div>
+          <div
+            class="q-mt-md"
+            style="text-align: center; font-size: 24px; font-weight: 600"
+          >
+            {{ personnelActiveCount }}
+          </div>
+        </q-card-section>
+      </q-card>
+
+      <!-- Card de Personal Inactivo -->
+      <q-card
+        class="q-mb-md"
+        :style="{
+          maxWidth: '300px',
+          margin: '20px auto',
+          backgroundColor: '#e3f2fd',
+          border: '2px solid #ff5252',
+        }"
+      >
+        <q-card-section>
+          <div class="text-h6" style="text-align: center; font-weight: bold">
+            Personal Inactivo
+          </div>
+          <div
+            class="q-mt-md"
+            style="text-align: center; font-size: 24px; font-weight: 600"
+          >
+            {{ personnelInactiveCount }}
+          </div>
+        </q-card-section>
+      </q-card>
+    </div>
+  </div>
+  <div class="info-general">
+    <div v-if="isOnHomePage" class="company-info1">
+      <h2 class="centered-title">Valores de la Empresa</h2>
+
+      <!-- Contenedor para dos columnas -->
+      <q-row class="q-gutter-md" style="display: flex; justify-content: center">
+        <!-- Columna para los valores de la empresa -->
+        <q-col cols="12" sm="6">
+          <q-card
+            class="q-mb-md"
+            :style="{
+              maxWidth: '300px',
+              margin: '20px auto',
+              backgroundColor: '#e3f2fd',
+              border: '2px solid #ff5252',
+            }"
+          >
+            <q-card-section>
+              <div
+                class="text-h6"
+                style="text-align: center; font-weight: bold"
               >
-                <strong class="alert-type">{{ alerta.tipo }}</strong
-                >: {{ alerta.mensaje }}
-              </li>
-            </ul>
-          </q-card-section>
-        </q-card>
-      </div>
+                Calidad
+              </div>
+              <div style="text-align: center; font-size: 16px">
+                Brindar siempre la mejor calidad a nuestros clientes es nuestra
+                prioridad.
+              </div>
+            </q-card-section>
+          </q-card>
 
-      <!-- Documentos Recientes -->
-      <div class="section">
-        <h3 class="section-title">Documentos Recientes</h3>
-        <q-card class="info-card">
-          <q-card-section>
-            <ul>
-              <li
-                v-for="(documento, index) in data.documentosRecientes"
-                :key="index"
+          <q-card
+            class="q-mb-md"
+            :style="{
+              maxWidth: '300px',
+              margin: '20px auto',
+              backgroundColor: '#e3f2fd',
+              border: '2px solid #ff5252',
+            }"
+          >
+            <q-card-section>
+              <div
+                class="text-h6"
+                style="text-align: center; font-weight: bold"
               >
-                {{ documento.nombre }} - Fecha:
-                <span class="value">{{ documento.fecha }}</span>
-              </li>
-            </ul>
-          </q-card-section>
-        </q-card>
-      </div>
+                Compromiso
+              </div>
+              <div style="text-align: center; font-size: 16px">
+                Nos comprometemos a cumplir con los plazos y requisitos
+                acordados.
+              </div>
+            </q-card-section>
+          </q-card>
+
+          <q-card
+            class="q-mb-md"
+            :style="{
+              maxWidth: '300px',
+              margin: '20px auto',
+              backgroundColor: '#e3f2fd',
+              border: '2px solid #ff5252',
+            }"
+          >
+            <q-card-section>
+              <div
+                class="text-h6"
+                style="text-align: center; font-weight: bold"
+              >
+                Liderazgo
+              </div>
+              <div style="text-align: center; font-size: 16px">
+                Lideramos el mercado peruano en la ejecución de obras de
+                ingeniería
+              </div>
+            </q-card-section>
+          </q-card>
+        </q-col>
+
+        <!-- Columna para los correos de los contactos de la empresa -->
+        <q-col cols="12" sm="6">
+          <q-card
+            class="q-mb-md"
+            :style="{
+              maxWidth: '300px',
+              margin: '20px auto',
+              backgroundColor: '#e3f2fd',
+              border: '2px solid #ff5252',
+            }"
+          >
+            <q-card-section>
+              <div
+                class="text-h6"
+                style="text-align: center; font-weight: bold"
+              >
+                Trabajo en equipo
+              </div>
+              <div style="text-align: center; font-size: 16px">
+                Fomentamos la colaboración y el apoyo mutuo, donde cada miembro
+                aporta su talento y habilidades para lograr objetivos comunes.
+              </div>
+            </q-card-section>
+          </q-card>
+
+          <q-card
+            class="q-mb-md"
+            :style="{
+              maxWidth: '300px',
+              margin: '20px auto',
+              backgroundColor: '#e3f2fd',
+              border: '2px solid #ff5252',
+            }"
+          >
+            <q-card-section>
+              <div
+                class="text-h6"
+                style="text-align: center; font-weight: bold"
+              >
+                Innovación
+              </div>
+              <div style="text-align: center; font-size: 16px">
+                Promovemos un ambiente donde la creatividad y las nuevas ideas
+                son siempre bienvenidas.
+              </div>
+            </q-card-section>
+          </q-card>
+        </q-col>
+      </q-row>
     </div>
 
-    <!-- Si 'data' está vacío, muestra el mensaje de carga -->
-    <div v-else class="loading-message">
-      <q-spinner color="primary" size="50px" />
-      <p>Cargando datos...</p>
+    <div v-if="isOnHomePage" class="company-info2">
+      <h2 class="centered-title">Contactos</h2>
+
+      <!-- Contenedor para dos columnas -->
+      <!-- Contenedor para dos columnas -->
+      <q-row class="q-gutter-md" style="display: flex; justify-content: center">
+        <!-- Columna para los valores de la empresa -->
+        <q-col cols="12" sm="6">
+          <q-card
+            class="q-mb-md"
+            :style="{
+              maxWidth: '300px',
+              margin: '20px auto',
+              backgroundColor: '#e3f2fd',
+              border: '2px solid #ff5252',
+            }"
+          >
+            <q-card-section>
+              <div
+                class="text-h6"
+                style="text-align: center; font-weight: bold"
+              >
+                Mantenimiento
+              </div>
+              <div style="text-align: center; font-size: 16px">
+                manten@promcoser.com
+              </div>
+            </q-card-section>
+          </q-card>
+
+          <q-card
+            class="q-mb-md"
+            :style="{
+              maxWidth: '300px',
+              margin: '20px auto',
+              backgroundColor: '#e3f2fd',
+              border: '2px solid #ff5252',
+            }"
+          >
+            <q-card-section>
+              <div
+                class="text-h6"
+                style="text-align: center; font-weight: bold"
+              >
+                Comercial
+              </div>
+              <div style="text-align: center; font-size: 16px">
+                comercial@promcoser.com
+              </div>
+            </q-card-section>
+          </q-card>
+
+          <q-card
+            class="q-mb-md"
+            :style="{
+              maxWidth: '300px',
+              margin: '20px auto',
+              backgroundColor: '#e3f2fd',
+              border: '2px solid #ff5252',
+            }"
+          >
+            <q-card-section>
+              <div
+                class="text-h6"
+                style="text-align: center; font-weight: bold"
+              >
+                Inventario
+              </div>
+              <div style="text-align: center; font-size: 16px">
+                inventario@promcoser.com
+              </div>
+            </q-card-section>
+          </q-card>
+        </q-col>
+        <q-col cols="12" sm="6">
+          <q-card
+            class="q-mb-md"
+            :style="{
+              maxWidth: '300px',
+              margin: '20px auto',
+              backgroundColor: '#e3f2fd',
+              border: '2px solid #ff5252',
+            }"
+          >
+            <q-card-section>
+              <div
+                class="text-h6"
+                style="text-align: center; font-weight: bold"
+              >
+                Contacto RR.HH
+              </div>
+              <div style="text-align: center; font-size: 16px">
+                rrhh@promcoser.com
+              </div>
+            </q-card-section>
+          </q-card>
+
+          <q-card
+            class="q-mb-md"
+            :style="{
+              maxWidth: '300px',
+              margin: '20px auto',
+              backgroundColor: '#e3f2fd',
+              border: '2px solid #ff5252',
+            }"
+          >
+            <q-card-section>
+              <div
+                class="text-h6"
+                style="text-align: center; font-weight: bold"
+              >
+                Soporte Técnico
+              </div>
+              <div style="text-align: center; font-size: 16px">
+                soporte@promcoser.com
+              </div>
+            </q-card-section>
+          </q-card>
+        </q-col>
+      </q-row>
     </div>
-  </q-page>
+  </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import { loadData } from "../../../services/loadData"; // Asegúrate de que la ruta de carga es correcta
+import { ref, onMounted, computed } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import { getInfoGeneralResumen } from "src/services/RegistroDataRepository/infoGeneral.js"; // Importamos la función del servicio
+import EssentialLink from "src/components/MenuSidebar.vue";
 
-// Estado reactivo para almacenar los datos cargados
-const data = ref(null);
+// Estado para almacenar la cantidad de clientes activos, inactivos, maquinaria y personal
+const clientCount = ref(0);
+const inactiveClientCount = ref(0);
+const machineryActiveCount = ref(0);
+const machineryInactiveCount = ref(0);
+const personnelActiveCount = ref(0);
+const personnelInactiveCount = ref(0);
 
-// Llamada al servicio para cargar los datos
-onMounted(async () => {
+// Función para obtener los datos generales
+const fetchClientData = async () => {
   try {
-    data.value = await loadData();
-    console.log("Datos cargados:", data.value); // Log para depuración
+    const data = await getInfoGeneralResumen(); // Llamada al servicio para obtener los datos generales
+    clientCount.value = data.cliente.activo; // Asignar la cantidad de clientes activos
+    inactiveClientCount.value = data.cliente.inactivo; // Asignar la cantidad de clientes inactivos
+
+    // Asignar la cantidad de maquinaria activa e inactiva
+    machineryActiveCount.value = data.maquinaria.activo;
+    machineryInactiveCount.value = data.maquinaria.inactivo;
+
+    // Asignar la cantidad de personal activo e inactivo
+    personnelActiveCount.value = data.personal.activo;
+    personnelInactiveCount.value = data.personal.inactivo;
   } catch (error) {
-    console.error("Error al cargar los datos:", error);
+    console.error("Error al obtener los datos:", error);
   }
+};
+
+// Llamar a la función cuando el componente se monta
+onMounted(() => {
+  fetchClientData();
 });
 
-// Función para formatear los números como moneda
-const formatCurrency = (value) => {
-  return new Intl.NumberFormat("es-PE", {
-    style: "currency",
-    currency: "PEN",
-  }).format(value);
-};
+// Datos de la sesión
+const router = useRouter();
+const route = useRoute();
+const leftDrawerOpen = ref(false);
+
+// Computed para verificar si estamos en la página de inicio
+const isOnHomePage = computed(() => route.path === "/homeAdmin");
+
+function goToHome() {
+  router.push({ path: "/homeAdmin" });
+}
+
+function toggleLeftDrawer() {
+  leftDrawerOpen.value = !leftDrawerOpen.value;
+}
+
+function logout() {
+  // Lógica adicional, como limpiar datos de sesión
+  router.push("/"); // Redirige a la página de login
+}
+
+// Lista de enlaces del menú
+const linksList = [
+  { title: "Personal", icon: "group", link: "/homeAdmin/personal" },
+  { title: "Maquinaria", icon: "construction", link: "/homeAdmin/maquinaria" },
+  { title: "Cliente", icon: "business", link: "/homeAdmin/cliente" },
+  { title: "Rol", icon: "security", link: "/homeAdmin/rol" },
+  {
+    title: "Lugar de Trabajo",
+    icon: "location_on",
+    link: "/homeAdmin/lugarTrabajo",
+  },
+  { title: "Marca", icon: "directions_car", link: "/homeAdmin/marca" },
+];
 </script>
 
 <style scoped>
-.bg-light-gray {
-  background-color: #f4f7fa;
-}
-
-.content-wrapper {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.title {
+.hero-image {
   text-align: center;
-  color: #1e3a8a;
-  margin-bottom: 30px;
+  margin-top: 20px;
 }
 
-.section {
-  margin-bottom: 40px;
+.hero-image img {
+  max-width: 70%;
+  height: auto;
 }
 
-.section-title {
-  color: #e53e3e;
-  font-size: 1.25rem;
-  margin-bottom: 10px;
+.middle-image {
+  margin-top: 30px;
+  text-align: center;
 }
 
-.info-card {
-  border-radius: 8px;
-  background-color: #ffffff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  margin-bottom: 15px;
+.middle-image img {
+  max-width: 55%;
+  height: auto;
+  margin-bottom: 20px;
 }
 
-.q-card-section {
-  padding: 20px;
-}
-
-.value {
+.centered-title {
+  text-align: center;
+  font-size: 50px;
   font-weight: bold;
-  color: #2d3748;
+  color: red;
 }
 
-.subsection-title {
-  color: #2b6cb0;
-  font-size: 1.1rem;
+.info-general {
+  display: flex;
+  justify-content: space-between;
+}
+.company-info2 {
+  width: 50%;
 }
 
-.alert-type {
-  color: #e53e3e;
-}
-
-.loading-message {
-  text-align: center;
-  padding-top: 50px;
+.company-info1 {
+  width: 50%;
 }
 </style>
