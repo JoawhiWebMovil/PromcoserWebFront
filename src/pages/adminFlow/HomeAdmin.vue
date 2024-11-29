@@ -37,7 +37,7 @@
           round
           icon="settings"
           aria-label="settings"
-          @click="logout"
+          @click="goToSettings"
           style="margin-left: 10px"
         />
       </q-toolbar>
@@ -150,6 +150,10 @@ const isOnHomePage = computed(() => route.path === "/homeAdmin");
 
 function goToHome() {
   router.push({ path: "/homeAdmin" });
+}
+
+function goToSettings() {
+  router.push({ path: "/homeAdmin/settings" });
 }
 
 function logout() {

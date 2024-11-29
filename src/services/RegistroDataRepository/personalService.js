@@ -40,6 +40,19 @@ export const createPersonal = async (personalData) => {
   }
 };
 
+export const changePassword = async (personalData) => {
+  try {
+    const response = await apiClient.post(
+      "/api/Personal/ChangePassword",
+      personalData
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error al crear la nueva contraseña:", error);
+    throw error;
+  }
+};
+
 export const deactivate = async (personalId) => {
   try {
     const response = await apiClient.put(

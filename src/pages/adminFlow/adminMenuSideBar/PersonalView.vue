@@ -104,7 +104,7 @@
           <input
             id="correoElectronico"
             v-model="personalTemporal.correoElectronico"
-            type="text"
+            type="email"
           />
 
           <label for="direccion">Direccion:</label>
