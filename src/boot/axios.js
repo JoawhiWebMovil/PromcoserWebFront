@@ -1,31 +1,29 @@
 import { boot } from "quasar/wrappers";
 import axios from "axios";
 
-const baseuUrl = "http://localhost:5159";
-// const baseuUrl = "https://ff11-38-25-17-64.ngrok-free.app/"; Tunel actual
-//http://localhost/5159
+const baseUrl = "https://ac8d-38-25-122-10.ngrok-free.app/";
 
 const apiClient = axios.create({
-  baseURL: baseuUrl,
+  baseURL: baseUrl,
   timeout: 1000,
   headers: {
     "ngrok-skip-browser-warning": "true",
   },
 });
 
-//Manejar los request y ponerle la autorización
+// Manejar los request y ponerle la autorización
 apiClient.interceptors.request.use((config) => {
   const userData = localStorage.getItem("userData");
   if (userData) {
     const token = JSON.parse(userData).token;
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = `Bearer ${token}`; // Corrige la interpolación
     }
   }
   return config;
 });
 
-//Manejar los response y ponerle la autorización
+// Manejar los response y manejar errores como 401
 apiClient.interceptors.response.use(
   (response) => {
     return response;
@@ -42,7 +40,7 @@ apiClient.interceptors.response.use(
 );
 
 const authClient = axios.create({
-  baseURL: baseuUrl,
+  baseURL: baseUrl,
   timeout: 1000,
   headers: {
     "ngrok-skip-browser-warning": "true",
@@ -51,7 +49,7 @@ const authClient = axios.create({
 
 export default boot(({ app }) => {
   app.config.globalProperties.$axios = axios;
-  app.config.globalProperties.$api = api;
+  app.config.globalProperties.$api = apiClient; // Usa 'apiClient' aquí
 });
 
 export { apiClient, authClient };

@@ -5,7 +5,7 @@
         @click="abrirFormularioCreacion"
         label="Crear Parte Diario"
         class="crear-parteDiario-button"
-        color="primary"
+        color="red"
         icon="add_circle_outline"
       />
       <q-toggle
@@ -163,7 +163,7 @@
           <input
             id="fechaParte"
             v-model="parteDiarioTemporal.fecha"
-            type="text"
+            type="date"
           />
 
           <button type="submit">Guardar</button>

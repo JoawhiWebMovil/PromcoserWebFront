@@ -5,7 +5,7 @@
         @click="abrirFormularioCreacion"
         label="Crear Maquinaria"
         class="crear-maquinaria-button"
-        color="primary"
+        color="red"
         icon="add_circle_outline"
       />
       <q-toggle
@@ -111,7 +111,11 @@
           <input
             id="anoFabricacion"
             v-model="maquinariaTemporal.anoFabricacion"
-            type="text"
+            type="number"
+            min="1950"
+            max="2100"
+            step="1"
+            placeholder="Año (ej: 2024)"
           />
 
           <button type="submit">Guardar</button>
@@ -196,7 +200,7 @@ export default {
         horometroActual: 0,
         horometroCompra: 0,
         tipoMaquinaria: "",
-        anoFabricacion: 0,
+        anoFabricacion: 2024,
         estado: true,
       });
       esNuevoMaquinaria.value = true;

@@ -5,7 +5,7 @@
         @click="abrirFormularioCreacion"
         label="Crear Personal"
         class="crear-personal-button"
-        color="primary"
+        color="red"
         icon="add_circle_outline"
       />
       <q-toggle
@@ -28,7 +28,7 @@
           <th>Telefono</th>
           <th>Correo Electronico</th>
           <th>Direccion</th>
-          <th>F. Ingerso</th>
+          <th>F. Ingreso</th>
           <th>F. Nacimiento</th>
           <th>Estado</th>
           <th>Editar</th>
@@ -118,14 +118,14 @@
           <input
             id="fechaIngreso"
             v-model="personalTemporal.fechaIngreso"
-            type="text"
+            type="date"
           />
 
           <label for="fechaNacimiento">Fecha Nacimiento:</label>
           <input
             id="fechaNacimiento"
             v-model="personalTemporal.fechaNacimiento"
-            type="text"
+            type="date"
           />
 
           <button type="submit">Guardar</button>

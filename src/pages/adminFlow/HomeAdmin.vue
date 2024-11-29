@@ -22,6 +22,24 @@
           @click="goToHome"
           style="margin-left: 10px"
         />
+        <q-btn
+          flat
+          dense
+          round
+          icon="logout"
+          aria-label="Logout"
+          @click="logout"
+          style="margin-left: 10px"
+        />
+        <q-btn
+          flat
+          dense
+          round
+          icon="settings"
+          aria-label="settings"
+          @click="logout"
+          style="margin-left: 10px"
+        />
       </q-toolbar>
     </q-header>
 
@@ -36,6 +54,7 @@
       bordered
       :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'"
       show-if-above
+      class="fixed-drawer"
     >
       <q-scroll-area class="fit" :horizontal-thumb-style="{ opacity: 0 }">
         <q-list>
@@ -133,6 +152,10 @@ function goToHome() {
   router.push({ path: "/homeAdmin" });
 }
 
+function logout() {
+  // Lógica adicional, como limpiar datos de sesión
+  router.push("/"); // Redirige a la página de login
+}
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
@@ -163,5 +186,13 @@ function toggleLeftDrawer() {
 
 .q-btn:hover {
   background-color: #f1f1f1;
+}
+
+.fixed-drawer {
+  position: fixed !important; /* Asegura que el drawer se quede fijo */
+  top: 0; /* Alinea al top */
+  left: 0; /* Alinea al lado izquierdo */
+  height: 100vh; /* Asegura que el drawer ocupe toda la altura */
+  z-index: 100; /* Asegura que el drawer esté encima del contenido */
 }
 </style>

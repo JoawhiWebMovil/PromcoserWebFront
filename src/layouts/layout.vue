@@ -11,10 +11,7 @@
           aria-label="Menu"
           @click="toggleLeftDrawer"
         />
-        <q-toolbar-title>
-          Bienvenido Joaquin
-        </q-toolbar-title>
-        <div>Código: 21100165</div>
+        <q-toolbar-title> Bienvenido Joaquin </q-toolbar-title>
       </q-toolbar>
     </q-header>
 
@@ -26,7 +23,13 @@
       :width="200"
       :breakpoint="400"
     >
-      <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px; border-right: 1px solid #ddd">
+      <q-scroll-area
+        style="
+          height: calc(100% - 150px);
+          margin-top: 150px;
+          border-right: 1px solid #ddd;
+        "
+      >
         <q-list padding>
           <q-item clickable v-ripple>
             <q-item-section avatar>
@@ -55,17 +58,21 @@
         </q-list>
       </q-scroll-area>
 
-      <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
+      <q-img
+        class="absolute-top"
+        src="https://cdn.quasar.dev/img/material.png"
+        style="height: 150px"
+      >
         <div class="absolute-bottom bg-transparent">
           <q-avatar size="56px" class="q-mb-sm">
-            <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+            <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
           </q-avatar>
           <div class="text-weight-bold">Razvan Stoenescu</div>
           <div>@rstoenescu</div>
         </div>
       </q-img>
     </q-drawer>
-    
+
     <!-- Page Container -->
     <q-page-container>
       <router-view> </router-view>
@@ -74,31 +81,31 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import EssentialLink from 'src/components/MenuSidebar.vue'
+import { ref } from "vue";
+import EssentialLink from "src/components/MenuSidebar.vue";
 
 defineOptions({
-  name: 'MainLayout'
-})
+  name: "MainLayout",
+});
 
 const linksList = [
   {
-    title: 'Empleados',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: '/empleados'
+    title: "Empleados",
+    caption: "quasar.dev",
+    icon: "school",
+    link: "/empleados",
   },
   {
-    title: 'Maquinaria',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: '/empleados'
-  }
-]
+    title: "Maquinaria",
+    caption: "quasar.dev",
+    icon: "school",
+    link: "/empleados",
+  },
+];
 
-const leftDrawerOpen = ref(false)
+const leftDrawerOpen = ref(false);
 
 function toggleLeftDrawer() {
-  leftDrawerOpen.value = !leftDrawerOpen.value
+  leftDrawerOpen.value = !leftDrawerOpen.value;
 }
 </script>

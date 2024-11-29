@@ -5,7 +5,7 @@
         @click="abrirFormularioCreacion"
         label="Crear Lugar"
         class="crear-lugar-button"
-        color="primary"
+        color="red"
         icon="add_circle_outline"
       />
       <q-toggle
