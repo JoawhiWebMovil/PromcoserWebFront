@@ -3,7 +3,7 @@
   <div v-if="isOnHomePage" class="hero-image">
     <img src="src/assets/logoPromcoser.png" alt="Imagen de empresa" />
   </div>
-   <!-- Carrusel de imágenes -->
+  <!-- Carrusel de imágenes -->
   <div v-if="isOnHomePage" class="carousel-container">
     <div class="carousel">
       <img src="src/assets/maquinaria1.jpg" alt="Imagen 1" />
@@ -31,7 +31,8 @@
           maxWidth: '300px',
           margin: '20px auto',
           backgroundColor: '#e3f2fd',
-          border: '2px solid #ff5252',
+          border: '5px solid #b97c7c',
+          borderRadius: '15px',
         }"
       >
         <q-card-section>
@@ -54,7 +55,8 @@
           maxWidth: '300px',
           margin: '20px auto',
           backgroundColor: '#e3f2fd',
-          border: '2px solid #ff5252',
+          border: '5px solid #b97c7c',
+          borderRadius: '15px',
         }"
       >
         <q-card-section>
@@ -77,7 +79,8 @@
           maxWidth: '300px',
           margin: '20px auto',
           backgroundColor: '#e3f2fd',
-          border: '2px solid #ff5252',
+          border: '5px solid #b97c7c',
+          borderRadius: '15px',
         }"
       >
         <q-card-section>
@@ -100,7 +103,8 @@
           maxWidth: '300px',
           margin: '20px auto',
           backgroundColor: '#e3f2fd',
-          border: '2px solid #ff5252',
+          border: '5px solid #b97c7c',
+          borderRadius: '15px',
         }"
       >
         <q-card-section>
@@ -123,7 +127,8 @@
           maxWidth: '300px',
           margin: '20px auto',
           backgroundColor: '#e3f2fd',
-          border: '2px solid #ff5252',
+          border: '5px solid #b97c7c',
+          borderRadius: '15px',
         }"
       >
         <q-card-section>
@@ -146,7 +151,8 @@
           maxWidth: '300px',
           margin: '20px auto',
           backgroundColor: '#e3f2fd',
-          border: '2px solid #ff5252',
+          border: '5px solid #b97c7c',
+          borderRadius: '15px',
         }"
       >
         <q-card-section>
@@ -177,7 +183,8 @@
               maxWidth: '300px',
               margin: '20px auto',
               backgroundColor: '#e3f2fd',
-              border: '2px solid #ff5252',
+              border: '5px solid #b97c7c',
+              borderRadius: '15px',
             }"
           >
             <q-card-section>
@@ -200,7 +207,8 @@
               maxWidth: '300px',
               margin: '20px auto',
               backgroundColor: '#e3f2fd',
-              border: '2px solid #ff5252',
+              border: '5px solid #b97c7c',
+              borderRadius: '15px',
             }"
           >
             <q-card-section>
@@ -223,7 +231,8 @@
               maxWidth: '300px',
               margin: '20px auto',
               backgroundColor: '#e3f2fd',
-              border: '2px solid #ff5252',
+              border: '5px solid #b97c7c',
+              borderRadius: '15px',
             }"
           >
             <q-card-section>
@@ -249,7 +258,8 @@
               maxWidth: '300px',
               margin: '20px auto',
               backgroundColor: '#e3f2fd',
-              border: '2px solid #ff5252',
+              border: '5px solid #b97c7c',
+              borderRadius: '15px',
             }"
           >
             <q-card-section>
@@ -272,7 +282,8 @@
               maxWidth: '300px',
               margin: '20px auto',
               backgroundColor: '#e3f2fd',
-              border: '2px solid #ff5252',
+              border: '5px solid #b97c7c',
+              borderRadius: '15px',
             }"
           >
             <q-card-section>
@@ -306,7 +317,8 @@
               maxWidth: '300px',
               margin: '20px auto',
               backgroundColor: '#e3f2fd',
-              border: '2px solid #ff5252',
+              border: '5px solid #b97c7c',
+              borderRadius: '15px',
             }"
           >
             <q-card-section>
@@ -328,7 +340,8 @@
               maxWidth: '300px',
               margin: '20px auto',
               backgroundColor: '#e3f2fd',
-              border: '2px solid #ff5252',
+              border: '5px solid #b97c7c',
+              borderRadius: '15px',
             }"
           >
             <q-card-section>
@@ -350,7 +363,8 @@
               maxWidth: '300px',
               margin: '20px auto',
               backgroundColor: '#e3f2fd',
-              border: '2px solid #ff5252',
+              border: '5px solid #b97c7c',
+              borderRadius: '15px',
             }"
           >
             <q-card-section>
@@ -373,7 +387,8 @@
               maxWidth: '300px',
               margin: '20px auto',
               backgroundColor: '#e3f2fd',
-              border: '2px solid #ff5252',
+              border: '5px solid #b97c7c',
+              borderRadius: '15px',
             }"
           >
             <q-card-section>
@@ -395,7 +410,8 @@
               maxWidth: '300px',
               margin: '20px auto',
               backgroundColor: '#e3f2fd',
-              border: '2px solid #ff5252',
+              border: '5px solid #b97c7c',
+              borderRadius: '15px',
             }"
           >
             <q-card-section>
@@ -495,7 +511,7 @@ const isOnHomePageVisible = ref(true); // Controla la visibilidad del carrusel
 
 // Método para mover el carrusel
 function moveSlide(step) {
-  const slides = document.querySelectorAll('.carousel img');
+  const slides = document.querySelectorAll(".carousel img");
   const totalSlides = slides.length;
 
   currentIndex.value += step;
@@ -506,7 +522,7 @@ function moveSlide(step) {
     currentIndex.value = 0; // Si llega al último slide, volver al primero
   }
 
-  const carousel = document.querySelector('.carousel');
+  const carousel = document.querySelector(".carousel");
   const offset = -currentIndex.value * 100; // Mueve el carrusel al siguiente slide
 
   carousel.style.transform = `translateX(${offset}%)`;

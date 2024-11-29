@@ -1,54 +1,56 @@
 <template>
-  <div class="change-password-container">
-    <h1 class="title">Cambio de Contraseña</h1>
-    <div class="user-info">
-      <p class="username">Usuario: {{ username }}</p>
+  <div class="page-container">
+    <div class="change-password-container">
+      <h1 class="title">Cambio de Contraseña</h1>
+      <div class="user-info">
+        <p class="username">Usuario: {{ username }}</p>
+      </div>
+      <form @submit.prevent="handleChangePassword" class="form">
+        <div class="form-group">
+          <label for="current-password" class="label">Contraseña Actual</label>
+          <input
+            id="current-password"
+            type="password"
+            v-model="currentPassword"
+            class="input"
+            placeholder="Ingresa tu contraseña actual"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="new-password" class="label">Nueva Contraseña</label>
+          <input
+            id="new-password"
+            type="password"
+            v-model="newPassword"
+            class="input"
+            placeholder="Ingresa tu nueva contraseña"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="confirm-password" class="label"
+            >Confirma Nueva Contraseña</label
+          >
+          <input
+            id="confirm-password"
+            type="password"
+            v-model="confirmPassword"
+            class="input"
+            placeholder="Confirma tu nueva contraseña"
+            required
+          />
+        </div>
+        <button type="submit" class="button">Cambiar Contraseña</button>
+      </form>
+      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+      <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
     </div>
-    <form @submit.prevent="handleChangePassword" class="form">
-      <div class="form-group">
-        <label for="current-password" class="label">Contraseña Actual</label>
-        <input
-          id="current-password"
-          type="password"
-          v-model="currentPassword"
-          class="input"
-          placeholder="Ingresa tu contraseña actual"
-          required
-        />
-      </div>
-      <div class="form-group">
-        <label for="new-password" class="label">Nueva Contraseña</label>
-        <input
-          id="new-password"
-          type="password"
-          v-model="newPassword"
-          class="input"
-          placeholder="Ingresa tu nueva contraseña"
-          required
-        />
-      </div>
-      <div class="form-group">
-        <label for="confirm-password" class="label"
-          >Confirma Nueva Contraseña</label
-        >
-        <input
-          id="confirm-password"
-          type="password"
-          v-model="confirmPassword"
-          class="input"
-          placeholder="Confirma tu nueva contraseña"
-          required
-        />
-      </div>
-      <button type="submit" class="button">Cambiar Contraseña</button>
-    </form>
-    <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
-    <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
   </div>
 </template>
 
 <script>
-import { ref, reactive, onMounted } from "vue";
+import { ref } from "vue";
 import { changePassword } from "../../../services/RegistroDataRepository/personalService";
 
 export default {
@@ -58,14 +60,12 @@ export default {
     const userData = ref(storedUserData ? JSON.parse(storedUserData) : null);
     const username = ref(userData.value?.usuario);
 
-    // Manejo de estado del formulario
     const currentPassword = ref("");
     const newPassword = ref("");
     const confirmPassword = ref("");
     const errorMessage = ref("");
     const successMessage = ref("");
 
-    // Función para cambiar contraseña
     const handleChangePassword = async () => {
       if (
         !currentPassword.value ||
@@ -76,24 +76,19 @@ export default {
         successMessage.value = "";
         return;
       }
-
       if (newPassword.value !== confirmPassword.value) {
         errorMessage.value = "Las contraseñas no coinciden.";
         successMessage.value = "";
         return;
       }
-
       try {
         const response = await changePassword({
           Usuario: username.value,
           Contrasena: currentPassword.value,
           NewContrasena: newPassword.value,
         });
-
         successMessage.value = response || "Contraseña cambiada exitosamente.";
         errorMessage.value = "";
-
-        // Limpiar los campos después de un cambio exitoso
         currentPassword.value = "";
         newPassword.value = "";
         confirmPassword.value = "";
@@ -112,44 +107,45 @@ export default {
       errorMessage,
       successMessage,
       handleChangePassword,
-      userData,
-      storedUserData,
     };
   },
 };
 </script>
 
 <style scoped>
-.change-password-container {
+.page-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  padding: 20px;
-  background-color: #ffffff;
-  color: #333;
-  border-radius: 10px;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #f0f0f0, #d9d9d9);
+}
+
+.change-password-container {
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-width: 15px; /* Grosor del borde */
+  border-style: solid;
+  border-color: #b97c7c;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  width: 100%;
   max-width: 400px;
-  margin: auto;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
 }
 
 .title {
-  font-size: 24px;
-  margin-bottom: 20px;
-}
-
-.user-info {
-  margin-bottom: 20px;
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
 }
 
 .username {
   font-size: 18px;
-  font-weight: bold;
-}
-
-.form {
-  width: 100%;
+  margin-bottom: 40px;
+  color: #555;
 }
 
 .form-group {
@@ -160,29 +156,39 @@ export default {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
+  color: #444;
+  text-align: left;
 }
 
 .input {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
+  border-radius: 8px;
   border: 1px solid #ccc;
-  border-radius: 5px;
   font-size: 14px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s;
+}
+
+.input:focus {
+  outline: none;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
 }
 
 .button {
   width: 100%;
-  padding: 10px;
-  background-color: #007bff;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: #da5656;
   color: white;
-  border: none;
-  border-radius: 5px;
   font-size: 16px;
+  border: none;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .button:hover {
-  background-color: #0056b3;
+  background-color: #d71515;
 }
 
 .error-message {
