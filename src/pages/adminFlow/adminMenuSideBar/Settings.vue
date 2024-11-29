@@ -54,16 +54,9 @@ import { changePassword } from "../../../services/RegistroDataRepository/persona
 export default {
   name: "ChangePassword",
   setup() {
-    // Obtener usuario desde localStorage
-    const userData = ref(localStorage.getItem("userData"));
-    const username = computed(() => {
-      try {
-        return JSON.parse(userData.value)?.username || "Invitado";
-      } catch (error) {
-        console.error("Error parsing user data:", error);
-        return "Invitado";
-      }
-    });
+    const storedUserData = localStorage.getItem("userData");
+    const userData = ref(storedUserData ? JSON.parse(storedUserData) : null);
+    const username = ref(userData.value?.usuario);
 
     // Manejo de estado del formulario
     const currentPassword = ref("");
@@ -119,6 +112,8 @@ export default {
       errorMessage,
       successMessage,
       handleChangePassword,
+      userData,
+      storedUserData,
     };
   },
 };

@@ -136,6 +136,12 @@ export default {
       try {
         if (esNuevoLugar.value) {
           const { idLugarTrabajo, ...entidadSinId } = lugarTemporal; // Quitar campo ID
+          if (!lugarTemporal.nombreMarca) {
+            alert(
+              "Todos los campos son obligatorios. Por favor, complete todos los campos."
+            );
+            return;
+          }
           await createLugar(entidadSinId);
         } else {
           await updateLugar(lugarTemporal);

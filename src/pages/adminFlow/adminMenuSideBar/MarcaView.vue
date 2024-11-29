@@ -135,6 +135,12 @@ export default {
       try {
         if (esNuevoMarca.value) {
           const { idMarca, ...entidadSinId } = marcaTemporal; // Quitar campo ID
+          if (!marcaTemporal.nombreMarca) {
+            alert(
+              "Todos los campos son obligatorios. Por favor, complete todos los campos."
+            );
+            return;
+          }
           await createMarca(entidadSinId);
         } else {
           await updateMarca(marcaTemporal);
