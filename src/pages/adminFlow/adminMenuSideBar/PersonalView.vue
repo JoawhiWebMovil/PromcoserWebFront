@@ -231,10 +231,53 @@ export default {
       mostrarDialogoEliminar.value = true; // Muestra el diálogo
     };
 
+    const validarDni = (dni) => {
+      const dniPattern = /^\d{8}$/; // Valida que el DNI tenga exactamente 8 dígitos
+      return dniPattern.test(dni);
+    };
+
+    const validarTelefono = (telefono) => {
+      const telefonoPattern = /^\d{9}$/; // Valida que el teléfono tenga exactamente 9 dígitos
+      return telefonoPattern.test(telefono);
+    };
+
+    const validarCamposVacios = () => {
+      // Verifica si algún campo obligatorio está vacío
+      return (
+        !personalTemporal.idRol ||
+        !personalTemporal.nombre ||
+        !personalTemporal.apellido ||
+        !personalTemporal.dni ||
+        !personalTemporal.telefono ||
+        !personalTemporal.correoElectronico ||
+        !personalTemporal.direccion ||
+        !personalTemporal.fechaIngreso ||
+        !personalTemporal.fechaNacimiento
+      );
+    };
+
     const guardarCambios = async () => {
+      // Verificar si algún campo obligatorio está vacío
+      if (validarCamposVacios()) {
+        alert("Por favor, complete todos los campos antes de guardar.");
+        return; // Detener el proceso si hay campos vacíos
+      }
+
+      // Validar DNI antes de guardar
+      if (!validarDni(personalTemporal.dni)) {
+        alert("El DNI debe tener exactamente 8 dígitos.");
+        return; // Detener el proceso si la validación falla
+      }
+
+      // Validar teléfono antes de guardar
+      if (!validarTelefono(personalTemporal.telefono)) {
+        alert("El teléfono debe tener exactamente 9 dígitos.");
+        return; // Detener el proceso si la validación falla
+      }
+
       try {
         if (esNuevoPersonal.value) {
-          const { idPersonal, ...entidadSinId } = personalTemporal; // Quitar campo ID
+          const { idPersonal, ...entidadSinId } = personalTemporal;
           await createPersonal(entidadSinId);
         } else {
           await updatePersonal(personalTemporal);

@@ -218,21 +218,53 @@ export default {
       mostrarDialogoEliminar.value = true; // Muestra el diálogo
     };
 
+    const validarPlaca = (placa) => {
+      const regex = /^[A-Za-z]{3}-\d{4}$/; // Expresión regular para validar el formato KND-5768
+      return regex.test(placa);
+    };
+
+    const validarCamposVacios = () => {
+      // Verifica si algún campo obligatorio está vacío
+      return (
+        !maquinariaTemporal.idMarca ||
+        !maquinariaTemporal.placa ||
+        !maquinariaTemporal.modelo ||
+        !maquinariaTemporal.horometroCompra ||
+        !maquinariaTemporal.horometroActual ||
+        !maquinariaTemporal.tipoMaquinaria ||
+        !maquinariaTemporal.anoFabricacion
+      );
+    };
+
     const guardarCambios = async () => {
+      // Verificar si algún campo obligatorio está vacío
+      if (validarCamposVacios()) {
+        alert("Por favor, complete todos los campos antes de guardar.");
+        return; // Detener el proceso si hay campos vacíos
+      }
+
+      // Validar el formato de la placa
+      if (!validarPlaca(maquinariaTemporal.placa)) {
+        alert(
+          "La placa no tiene el formato correcto. Debe ser en el formato ABC-1234."
+        );
+        return; // Detener el proceso si la placa no es válida
+      }
+
       try {
         delete maquinariaTemporal.nombreMarca;
         if (esNuevoMaquinaria.value) {
-          const { idMaquinaria, ...entidadSinId } = maquinariaTemporal; // Quitar campo ID
-          await createMaquinaria(entidadSinId);
+          const { idMaquinaria, ...entidadSinId } = maquinariaTemporal;
+          await createMaquinaria(entidadSinId); // Crear nueva maquinaria
         } else {
-          await updateMaquinaria(maquinariaTemporal);
+          await updateMaquinaria(maquinariaTemporal); // Actualizar maquinaria existente
         }
-        maquinariaSeleccionado.value = false;
-        await obtenerMaquinarias();
+        maquinariaSeleccionado.value = false; // Desmarcar la maquinaria seleccionada
+        await obtenerMaquinarias(); // Obtener la lista actualizada de maquinarias
       } catch (error) {
         console.error("Error al guardar los cambios:", error);
       } finally {
-        mostrarFormulario.value = false;
+        mostrarFormulario.value = false; // Cerrar el formulario
       }
     };
 
