@@ -3,11 +3,21 @@
   <div v-if="isOnHomePage" class="hero-image">
     <img src="src/assets/logoPromcoser.png" alt="Imagen de empresa" />
   </div>
-  <!-- Nueva imagen entre el título y las cards -->
-  <div v-if="isOnHomePage" class="middle-image">
-    <img src="src/assets/maquinaria.jpg" alt="Imagen adicional" />
-  </div>
+   <!-- Carrusel de imágenes -->
+  <div v-if="isOnHomePage" class="carousel-container">
+    <div class="carousel">
+      <img src="src/assets/maquinaria1.jpg" alt="Imagen 1" />
+      <img src="src/assets/maquinaria2.jpg" alt="Imagen 2" />
+      <img src="src/assets/maquinaria3.jpg" alt="Imagen 3" />
+      <!-- Agrega más imágenes según sea necesario -->
+    </div>
 
+    <!-- Controles de navegación -->
+    <div class="carousel-controls">
+      <button class="prev" @click="moveSlide(-1)">&#10094;</button>
+      <button class="next" @click="moveSlide(1)">&#10095;</button>
+    </div>
+  </div>
   <!-- Mostrar información estática en la página de inicio -->
 
   <div v-if="isOnHomePage" class="company-info">
@@ -478,6 +488,29 @@ const linksList = [
   },
   { title: "Marca", icon: "directions_car", link: "/homeAdmin/marca" },
 ];
+
+// Variables reactivas
+const currentIndex = ref(0);
+const isOnHomePageVisible = ref(true); // Controla la visibilidad del carrusel
+
+// Método para mover el carrusel
+function moveSlide(step) {
+  const slides = document.querySelectorAll('.carousel img');
+  const totalSlides = slides.length;
+
+  currentIndex.value += step;
+
+  if (currentIndex.value < 0) {
+    currentIndex.value = totalSlides - 1; // Si llega al primer slide, ir al último
+  } else if (currentIndex.value >= totalSlides) {
+    currentIndex.value = 0; // Si llega al último slide, volver al primero
+  }
+
+  const carousel = document.querySelector('.carousel');
+  const offset = -currentIndex.value * 100; // Mueve el carrusel al siguiente slide
+
+  carousel.style.transform = `translateX(${offset}%)`;
+}
 </script>
 
 <style scoped>
@@ -519,5 +552,59 @@ const linksList = [
 
 .company-info1 {
   width: 50%;
+}
+
+/* Estilos para el contenedor del carrusel */
+.carousel-container {
+  max-width: 70%;
+  overflow: hidden; /* Oculta las imágenes que se salen del contenedor */
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Contenedor de las imágenes */
+.carousel {
+  display: flex;
+  transition: transform 0.3s ease;
+  gap: 10px; /* Espacio entre las imágenes */
+}
+
+/* Estilo para cada imagen */
+.carousel img {
+  width: 100%;
+  height: auto;
+  object-fit: cover; /* Asegura que las imágenes se ajusten bien sin distorsión */
+  transition: transform 0.3s ease; /* Efecto de agrandar/achicar */
+  flex: 0 0 auto; /* Evita que las imágenes se estiren o se achiquen */
+  border-radius: 8px; /* Opcional: agrega bordes redondeados */
+}
+
+/* Efecto de agrandar al pasar el cursor */
+.carousel img:hover {
+  transform: scale(1.1);
+}
+
+/* Controles de navegación */
+.carousel-controls {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+}
+
+.carousel-controls button {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.carousel-controls button:hover {
+  background-color: rgba(0, 0, 0, 0.8);
 }
 </style>
